@@ -40,8 +40,8 @@ const SentimentSummary = () => {
   // Calculate sentiment labels based on average sentiment
   const getSentimentLabel = (avgSentiment) => {
     if (avgSentiment > 0.5) return "strongly positive";
-    if (avgSentiment > 0.1) return "moderately positive";
-    if (avgSentiment < -0.1) return "moderately negative";
+    if (avgSentiment > 0.25) return "moderately positive";
+    if (avgSentiment < -0.25) return "moderately negative";
     if (avgSentiment < -0.5) return "strongly negative";
     return "neutral";
   };

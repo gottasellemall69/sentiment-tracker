@@ -2,16 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { setFeedback } from '../redux/feedbackSlice';
-import { auth } from '../config/firebase'; // Firebase authentication
-import { onAuthStateChanged } from 'firebase/auth';
 import FeedbackChart from '../components/FeedbackChart';
 import SentimentSummary from '../components/SentimentSummary';
-import FacebookIntegration from '../components/FacebookIntegration';
 import ChatLogUploader from '../components/ChatLogUploader';
 import AdminPanel from '../components/AdminPanel';
 
- const NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL = process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL;
 
 export default function Dashboard() {
   const isAdmin = false;
@@ -43,21 +38,6 @@ export default function Dashboard() {
     fetchFeedback();
   }, [dispatch]);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (!currentUser || currentUser.email !== NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL) {  
-        router.push("/"); // Redirect non-admin users to the homepage
-      } else {
-        setUser(currentUser);
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, [router]);
-
-  if (loading) return <p className="text-center text-gray-500">Loading...</p>;
-
   // Handle loading and error states
   if (loading) {
     return <p className="text-center text-gray-500">Loading feedback data...</p>;
@@ -79,7 +59,8 @@ export default function Dashboard() {
             <ChatLogUploader />
           </div>
           
-       <div className=' mx-auto flex flex-wrap max-w-7xl'><div className="grid grid-cols-1 gap-6 w-full">
+       <div className=' mx-auto flex flex-wrap max-w-7xl'>
+        <div className="grid grid-cols-1 gap-6 w-full">
         <div>
           <FeedbackChart />
         </div>
@@ -89,13 +70,11 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {!isAdmin && (
         <div className="mt-8">
           <AdminPanel
             feedback={feedback}
           />
         </div>
-      )}      
     </div>
   );
 }

@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { setFeedback, selectFeedback } from "../redux/feedbackSlice";
 import { Filter, Download } from 'lucide-react';
 
 const AdminPanel = () => {
-  const dispatch = useDispatch();
-  const feedback = useSelector(selectFeedback);
+  const [feedback, setFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("");
@@ -29,7 +26,7 @@ const AdminPanel = () => {
     };
 
     fetchFeedback();
-  }, [dispatch]);
+  }, []);
 
   const filteredFeedback = useMemo(() => {
     return feedback?.filter((item) =>
@@ -55,24 +52,6 @@ const AdminPanel = () => {
     <div className="bg-white rounded-lg shadow p-6 h-[500px] overflow-y-auto">
       <h2 className="text-xl font-bold mb-4">Admin Panel</h2>
 
-      <div className="mb-4 flex justify-between">
-        <div
-          type="text"
-          placeholder="Filter by spectrum or text..."
-          className="px-3 py-2 border rounded-md"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        <select
-          className="px-3 py-2 border rounded-md"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-        >
-          <option value="date">Sort by Date</option>
-          <option value="sentiment">Sort by Sentiment</option>
-        </select>
-      </div>
-
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -94,8 +73,7 @@ const AdminPanel = () => {
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-900">{item.feedback}</td>
                 <td className="px-6 py-4 text-sm text-gray-500">
-                  <strong>User:</strong> {item.politicalSpectrum || "N/A"}
-                  <br />
+                  <strong>User:</strong> {item.politicalSpectrum || "N/A"}<br />
                   <strong>Predicted:</strong> {item.predictedSpectrum || "N/A"}
                 </td>
                 <td className="px-6 py-4">

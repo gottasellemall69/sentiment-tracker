@@ -91,13 +91,13 @@ const FeedbackForm = () => {
 
       // Analyze sentiment and predict political spectrum
       const analysis = await analyzeSentiment(feedback);
-      const { spectrum, confidence } = await predictPoliticalSpectrum(feedback);
+      const { spectrum, predictedSpectrum, confidence } = await predictPoliticalSpectrum(feedback);
 
       await dispatch(
         addFeedbackWithSentiment({
           feedback: feedback.trim(),
-          politicalSpectrum: politicalSpectrum || spectrum, // Use predicted spectrum if not provided
-          predictedSpectrum: spectrum,
+          politicalSpectrum: politicalSpectrum || predictedSpectrum, // Use predicted spectrum if not provided
+          predictedSpectrum: predictedSpectrum,
           sentiment: {
             score: analysis.score,
             magnitude: analysis.magnitude,
@@ -113,8 +113,8 @@ const FeedbackForm = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           feedback: feedback.trim(),
-          politicalSpectrum: politicalSpectrum || spectrum, // Use predicted spectrum if not provided
-          predictedSpectrum: spectrum,
+          politicalSpectrum: politicalSpectrum || predictedSpectrum, // Use predicted spectrum if not provided
+          predictedSpectrum: predictedSpectrum,
           sentiment: {
             score: analysis.score,
             magnitude: analysis.magnitude,

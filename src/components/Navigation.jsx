@@ -57,16 +57,17 @@ const Navigation = () => {
               Submit Opinion
             </Link>
             <span>
-              {user && (
-
-                <>
-                  <Link
-                    href="/Dashboard" passHref
+              <Link
+                    href="/dashboard" passHref
                     className={`flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors ${isActive('/feedback')}`}
                   >
                     <MessageSquarePlus className="h-4 w-4 mr-2" />
                     Admin Dashboard
-                  </Link><button
+                  </Link>
+              {user && (
+
+                <>
+                  <button
                     onClick={handleLogout}
                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
                   >
