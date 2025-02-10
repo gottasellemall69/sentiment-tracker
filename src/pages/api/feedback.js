@@ -43,7 +43,7 @@ export default async function handler(req, res) {
 // Construct document using the predicted spectrum from the form if provided
 const document = {
   feedback: feedback.trim(),
-  politicalSpectrum: politicalSpectrum?.trim() || "N/A",
+  politicalSpectrum: politicalSpectrum?.trim() || spectrumAnalysis.spectrum,
   predictedSpectrum: predictedSpectrum || spectrumAnalysis.spectrum,  // Use passed predictedSpectrum if available
   sentiment: {
     score: sentimentAnalysis.score,
