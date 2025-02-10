@@ -13,7 +13,7 @@ export default function Login() {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/dashboard"); // Redirect to Dashboard after login
+      router.push("/Dashboard"); // Redirect to Dashboard after login
     } catch (error) {
       setError("Invalid email or password. Try again.");
     }

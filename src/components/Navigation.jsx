@@ -41,29 +41,32 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link
-              href="/" passHref
+            <a
+              href="/"
+              rel="noopener noreferrer"
               className="flex items-center text-white">
               <Activity className="h-8 w-8" />
               <span className="ml-2 text-xl font-bold">Sentiment Tracker</span>
-            </Link>
+            </a>
           </div>
           <div className="flex space-x-4">
-            <Link
-              href="/" passHref
+            <a
+              href="/"
+              rel="noopener noreferrer"
               className={`flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors ${isActive('/')}`}
             >
               <BarChart2 className="h-4 w-4 mr-2" />
               Submit Opinion
-            </Link>
+            </a>
             <span>
-              <Link
-                    href="/dashboard" passHref
-                    className={`flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors ${isActive('/feedback')}`}
+              <a
+                href="/dashboard"
+                rel="noopener noreferrer"
+                className={`flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors ${isActive('/dashboard')}`}
                   >
                     <MessageSquarePlus className="h-4 w-4 mr-2" />
                     Admin Dashboard
-                  </Link>
+                  </a>
               {user && (
 
                 <>
