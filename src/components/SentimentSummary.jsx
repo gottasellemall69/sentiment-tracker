@@ -22,29 +22,35 @@ const SentimentSummary = () => {
       };
       fetchFeedback();
     }
-  }, [dispatch, feedback]);
+  }, [dispatch, feedback.length]);
 
   // Group feedback by spectrum
-  const summaryData = feedback.reduce((acc, { politicalSpectrum, predictedSpectrum, sentiment }) => {
-    const spectrum = politicalSpectrum !== "N/A" ? politicalSpectrum : predictedSpectrum || "unspecified";
-
-    if (!acc[spectrum]) {
-      acc[spectrum] = { count: 0, totalSentiment: 0 };
-    }
+  const summaryData = feedback.reduce((acc, { politicalSpectrum, predictedSpectrum, sentiment, source }) => {
+    // Use politicalSpectrum if given, else use predictedSpectrum, fallback to 'unspecified'
+    const spectrum = politicalSpectrum && politicalSpectrum !== " " ? politicalSpectrum : predictedSpectrum || 'N/A';
+  
+    if (!acc[spectrum]) acc[spectrum] = { count: 0, totalSentiment: 0, sources: {} };
     acc[spectrum].count++;
     acc[spectrum].totalSentiment += sentiment.score;
-
+  
+    // Track the source of feedback (e.g., 'feedback-form', 'uploaded')
+    acc[spectrum].sources[source] = (acc[spectrum].sources[source] || 0) + 1;
+  
     return acc;
   }, {});
+  
 
   // Calculate sentiment labels based on average sentiment
   const getSentimentLabel = (avgSentiment) => {
     if (avgSentiment > 0.5) return "strongly positive";
-    if (avgSentiment > 0.25) return "moderately positive";
-    if (avgSentiment < -0.25) return "moderately negative";
+    if (avgSentiment > 0.2) return "moderately positive";
+    if (avgSentiment > 0.05) return "slightly positive";
     if (avgSentiment < -0.5) return "strongly negative";
+    if (avgSentiment < -0.2) return "moderately negative";
+    if (avgSentiment < -0.05) return "slightly negative";
     return "neutral";
   };
+  
 
   // Get the sentiment icon based on the score
   const getSentimentIcon = (score) => {

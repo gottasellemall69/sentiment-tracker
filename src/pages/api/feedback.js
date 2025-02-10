@@ -12,9 +12,9 @@ export default async function handler(req, res) {
       const collection = db.collection('feedback');
 
       // Parse request body
-      const { feedback, recaptchaToken, politicalSpectrum, timestamp, source } = req.body;
+      const { feedback, recaptchaToken, politicalSpectrum, predictedSpectrum, timestamp, source } = req.body;
 
-      if (!feedback || feedback.length < 10 || feedback.length > 4096) {
+      if (!feedback || feedback.length < 10 || feedback.length > 10000) {
         return res.status(400).json({ success: false, error: 'Invalid feedback length' });
       }
 
@@ -39,20 +39,22 @@ export default async function handler(req, res) {
       const sentimentAnalysis = await analyzeSentiment(feedback);
       const spectrumAnalysis = await predictPoliticalSpectrum(feedback);
 
-      // Construct document
-      const document = {
-        feedback: feedback.trim(),
-        politicalSpectrum: politicalSpectrum?.trim() || "Not Given",
-        predictedSpectrum: spectrumAnalysis.spectrum,
-        sentiment: {
-          score: sentimentAnalysis.score,
-          magnitude: sentimentAnalysis.magnitude,
-          confidence: sentimentAnalysis.confidence,
-          topWords: sentimentAnalysis.topWords, // **Stores top contributing words**
-        },
-        timestamp: timestamp || new Date(),
-        source: source || 'feedback-form',
-      };
+
+// Construct document using the predicted spectrum from the form if provided
+const document = {
+  feedback: feedback.trim(),
+  politicalSpectrum: politicalSpectrum?.trim() || "N/A",
+  predictedSpectrum: predictedSpectrum || spectrumAnalysis.spectrum,  // Use passed predictedSpectrum if available
+  sentiment: {
+    score: sentimentAnalysis.score,
+    magnitude: sentimentAnalysis.magnitude,
+    confidence: sentimentAnalysis.confidence,
+    topWords: sentimentAnalysis.topWords,
+  },
+  timestamp: timestamp || new Date(),
+  source: source || "feedback-form",
+};
+
 
       // Insert into MongoDB
       const result = await collection.insertOne(document);

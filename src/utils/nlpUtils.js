@@ -81,7 +81,7 @@ export async function analyzeSentiment(text) {
       score: normalizedScore,
       magnitude: Math.abs(normalizedScore),
       topWords,
-      confidence: Math.max(confidence, 0.01),
+      confidence: Math.max(confidence, 0.1),
       sentimentLabel
     };
   } catch (error) {

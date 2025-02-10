@@ -13,7 +13,7 @@ const FeedbackForm = () => {
   const dispatch = useDispatch();
   const [feedback, setFeedback] = useState('');
   const [politicalSpectrum, setPoliticalSpectrum] = useState('');
-  const [predictedSpectrum, setPredictedSpectrum] = useState(null);
+  const [predictedSpectrum, setPredictedSpectrum] = useState('');
   const [honeypot, setHoneypot] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const recaptchaRef = useRef(null);
@@ -44,8 +44,8 @@ const FeedbackForm = () => {
       toast.error('Feedback must be at least 10 characters long.');
       return false;
     }
-    if (feedback.length > 1000) {
-      toast.error('Feedback must not exceed 1000 characters.');
+    if (feedback.length > 10000) {
+      toast.error('Feedback must not exceed 10000 characters.');
       return false;
     }
     if (honeypot) {
@@ -169,9 +169,9 @@ const FeedbackForm = () => {
           onChange={(e) => setFeedback(e.target.value)}
           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           placeholder="Share your thoughts..."
-          maxLength={1000}
+          maxLength={10000}
         />
-        <div className="text-xs text-gray-500 text-right">{feedback.length}/1000</div>
+        <div className="text-xs text-gray-500 text-right">{feedback.length}/10000</div>
       </div>
       
         <div>
