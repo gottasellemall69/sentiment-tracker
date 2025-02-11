@@ -25,9 +25,5 @@ dist-ssr
 .env.local
 .env
 repomix-output.txt
-<<<<<<< Updated upstream
 utils/parsetool.js
-=======
-utils/parsetool.js
->>>>>>> Stashed changes
-*.pack
+.next
