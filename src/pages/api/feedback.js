@@ -39,26 +39,22 @@ export default async function handler(req, res) {
       const sentimentAnalysis = await analyzeSentiment(feedback);
       const spectrumAnalysis = await predictPoliticalSpectrum(feedback);
 
+      // Construct document using the predicted spectrum from the form if provided
+      const document = {
+        feedback: feedback.trim(),
+        politicalSpectrum: politicalSpectrum?.trim() || "N/A",
+        predictedSpectrum: predictedSpectrum || spectrumAnalysis.spectrum,  // Use provided predicted spectrum, otherwise use analysis
+        sentiment: {
+          score: sentimentAnalysis.score,
+          magnitude: sentimentAnalysis.magnitude,
+          confidence: sentimentAnalysis.confidence,
+          topWords: sentimentAnalysis.topWords,
+        },
+        timestamp: timestamp || new Date(),
+        source: source || 'feedback-form',
+      };
 
-// Construct document using the predicted spectrum from the form if provided
-const document = {
-  feedback: feedback.trim(),
-  politicalSpectrum: politicalSpectrum?.trim() || spectrumAnalysis.spectrum,
-  predictedSpectrum: predictedSpectrum || spectrumAnalysis.spectrum,  // Use passed predictedSpectrum if available
-  sentiment: {
-    score: sentimentAnalysis.score,
-    magnitude: sentimentAnalysis.magnitude,
-    confidence: sentimentAnalysis.confidence,
-    topWords: sentimentAnalysis.topWords,
-  },
-  timestamp: timestamp || new Date(),
-  source: source || "feedback-form",
-};
-
-
-      // Insert into MongoDB
       const result = await collection.insertOne(document);
-
       res.status(201).json({ success: true, insertedId: result.insertedId, feedback: document });
     } catch (error) {
       console.error('Error inserting document:', error);

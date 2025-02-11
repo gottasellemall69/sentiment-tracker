@@ -72,7 +72,6 @@ const FeedbackForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (isSubmitting) return;
     if (isRateLimited()) {
       toast.error('You have reached the submission limit. Please try again later.');
@@ -89,36 +88,20 @@ const FeedbackForm = () => {
         return;
       }
 
-      // Analyze sentiment and predict political spectrum
-      const analysis = await analyzeSentiment(feedback);
-      const { spectrum, predictedSpectrum, confidence } = await predictPoliticalSpectrum(feedback);
-
-      await dispatch(
-        addFeedbackWithSentiment({
-          feedback: feedback.trim(),
-          politicalSpectrum: politicalSpectrum || predictedSpectrum, // Use predicted spectrum if not provided
-          predictedSpectrum: predictedSpectrum,
-          sentiment: {
-            score: analysis.score,
-            magnitude: analysis.magnitude,
-            confidence: analysis.confidence,
-          },
-          source: 'feedback-form',
-          recaptchaToken: recaptchaValue,
-        })
-      ).unwrap();
+      const { spectrum: predictedSpectrum, confidence } = await predictPoliticalSpectrum(feedback.trim());
+      const sentiment = await analyzeSentiment(feedback.trim());
 
       const response = await fetch('/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           feedback: feedback.trim(),
-          politicalSpectrum: politicalSpectrum || predictedSpectrum, // Use predicted spectrum if not provided
-          predictedSpectrum: predictedSpectrum,
+          politicalSpectrum,
+          predictedSpectrum,
           sentiment: {
-            score: analysis.score,
-            magnitude: analysis.magnitude,
-            confidence: analysis.confidence,
+            score: sentiment.score,
+            magnitude: sentiment.magnitude,
+            confidence: sentiment.confidence,
           },
           source: 'feedback-form',
           recaptchaToken: recaptchaValue,
@@ -129,12 +112,17 @@ const FeedbackForm = () => {
         throw new Error('Failed to submit feedback. Please try again.');
       }
 
+      const savedFeedback = await response.json();
+      dispatch(addFeedbackWithSentiment(savedFeedback));  // Update Redux with new entry
       updateSubmissionHistory();
       toast.success('Feedback submitted successfully!');
+
+      // Reset form fields
       setFeedback('');
-      setPoliticalSpectrum(politicalSpectrum);
-      setPredictedSpectrum(spectrum);
+      setPoliticalSpectrum('');
+      setPredictedSpectrum(predictedSpectrum);
       recaptchaRef.current?.reset();
+
     } catch (error) {
       console.error('Error submitting feedback:', error);
       toast.error(error.message || 'An unexpected error occurred.');
@@ -173,28 +161,28 @@ const FeedbackForm = () => {
         />
         <div className="text-xs text-gray-500 text-right">{feedback.length}/10000</div>
       </div>
-      
-        <div>
-          <label htmlFor="spectrum" className="block text-sm font-medium text-gray-700">
-            You are...
-          </label>
-          <select
-            id="spectrum"
-            value={politicalSpectrum}
-            onChange={(e) => setPoliticalSpectrum(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-          >
-            <option value="">Select Position (optional)</option>
-            <option value="far-left">Far Left</option>
-            <option value="left">Left</option>
-            <option value="center-left">Center Left</option>
-            <option value="center">Center</option>
-            <option value="center-right">Center Right</option>
-            <option value="right">Right</option>
-            <option value="far-right">Far Right</option>
-          </select>
-        </div>
-        <div className="text-sm text-gray-500 flex items-start space-x-2">
+
+      <div>
+        <label htmlFor="spectrum" className="block text-sm font-medium text-gray-700">
+          You are...
+        </label>
+        <select
+          id="spectrum"
+          value={politicalSpectrum}
+          onChange={(e) => setPoliticalSpectrum(e.target.value)}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+        >
+          <option value="">Select Position (optional)</option>
+          <option value="far-left">Far Left</option>
+          <option value="left">Left</option>
+          <option value="center-left">Center Left</option>
+          <option value="center">Center</option>
+          <option value="center-right">Center Right</option>
+          <option value="right">Right</option>
+          <option value="far-right">Far Right</option>
+        </select>
+      </div>
+      <div className="text-sm text-gray-500 flex items-start space-x-2">
         <AlertCircle className="h-5 w-5 flex-shrink-0" />
         <p>
           To prevent abuse, there is a limit of {SUBMISSION_LIMIT} submissions per hour. Please

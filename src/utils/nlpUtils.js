@@ -90,53 +90,59 @@ export async function analyzeSentiment(text) {
   }
 }
 
-// Improved Political Spectrum Prediction
-const POLITICAL_CATEGORIES = {
-  'far-left': { keywords: ['revolution', 'socialism', 'communist', 'abolish', 'collective', 'undocumented immigrant', 'immigration', 'MAGA', 'nazi'], weight: 1.0 },
-  'left': { keywords: ['progressive', 'welfare', 'regulation', 'equality', 'reform', 'undocumented immigrant', 'immigration',], weight: 0.6 },
-  'center-left': { keywords: ['liberal', 'public', 'social', 'healthcare', 'education', 'undocumented immigrant', 'immigration',], weight: 0.3 },
-  'center': { keywords: ['moderate', 'compromise', 'balance', 'bipartisan', 'pragmatic'], weight: 0.0 },
-  'center-right': { keywords: ['conservative', 'tradition', 'market', 'fiscal', 'values', 'illegal alien', 'invasion', 'border war'], weight: -0.3 },
-  'right': { keywords: ['freedom', 'liberty', 'deregulation', 'privatize', 'tax cuts', 'illegal alien', 'invasion', 'border war'], weight: -0.6 },
-  'far-right': { keywords: ['nationalist', 'sovereignty', 'patriot', 'traditional', 'strong', 'illegal alien', 'invasion', 'border war', 'the Libs', 'Dems', 'MAGA', 'fascist'], weight: -1.0 },
-};
-
 export async function predictPoliticalSpectrum(text) {
+  const POLITICAL_CATEGORIES = {
+    'far-left': { keywords: ['revolution', 'socialism', 'communist', 'abolish', 'collective', 'undocumented immigrant', 'immigration', 'MAGA', 'nazi'], weight: 1.0 },
+    'left': { keywords: ['progressive', 'welfare', 'regulation', 'equality', 'reform', 'undocumented immigrant', 'immigration'], weight: 0.6 },
+    'center-left': { keywords: ['liberal', 'public', 'social', 'healthcare', 'education', 'undocumented immigrant', 'immigration'], weight: 0.3 },
+    'center': { keywords: ['moderate', 'compromise', 'balance', 'bipartisan', 'pragmatic'], weight: 0.0 },
+    'center-right': { keywords: ['conservative', 'tradition', 'market', 'fiscal', 'values', 'illegal alien', 'invasion', 'border war'], weight: -0.3 },
+    'right': { keywords: ['freedom', 'liberty', 'deregulation', 'privatize', 'tax cuts', 'illegal alien', 'invasion', 'border war'], weight: -0.6 },
+    'far-right': { keywords: ['nationalist', 'sovereignty', 'patriot', 'traditional', 'strong', 'illegal alien', 'invasion', 'border war', 'the Libs', 'Dems', 'MAGA', 'fascist'], weight: -1.0 },
+  };
+
   const lowercaseText = text.toLowerCase();
-  
-  let scores = Object.entries(POLITICAL_CATEGORIES).map(([category, data]) => {
-    let score = data.keywords.reduce((acc, keyword) => {
-      const matchCount = lowercaseText.split(keyword.toLowerCase()).length - 1; // Count occurrences
-      return acc + matchCount * data.weight;
-    }, 0);
-    return { category, score };
-  });
 
-  // Find the highest scoring category
-  scores.sort((a, b) => b.score - a.score);
-  let highestScore = scores[0];
-
-  // If no strong matches, use transformer classification
-  if (highestScore.score === 0 && textClassificationPipeline) {
+  // 1️⃣ Attempt Transformer-Based Classification First
+  if (textClassificationPipeline) {
     try {
       const result = await textClassificationPipeline(text, { topk: 1, truncation: true });
       const sentiment = result[0].label;
-      const confidence = result[0].score;
+      const transformerConfidence = result[0].score;
+
+      // Map the transformer sentiment to political spectrum
+      const transformerSpectrum = sentiment === 'POSITIVE' ? 'center-right' : 'center-left';
 
       return {
-        spectrum: sentiment === 'POSITIVE' ? 'center-right' : 'center-left',
-        confidence
+        spectrum: transformerSpectrum,
+        confidence: transformerConfidence  // Use transformer's confidence
       };
     } catch (error) {
       console.warn('Transformer classification failed:', error);
     }
   }
 
+  // 2️⃣ Fallback to Keyword Matching if Transformer Fails
+  let scores = Object.entries(POLITICAL_CATEGORIES).map(([category, data]) => {
+    let score = data.keywords.reduce((acc, keyword) => {
+      const matchCount = lowercaseText.split(keyword.toLowerCase()).length - 1;  // Count occurrences
+      return acc + matchCount * data.weight;
+    }, 0);
+    return { category, score };
+  });
+
+  scores.sort((a, b) => b.score - a.score);
+  let highestScore = scores[0];
+
+  // Adjusted confidence scaling for keyword matching fallback
+  const adjustedConfidence = Math.min(Math.max(Math.abs(highestScore.score) * 0.5, 0.1), 1);
+
   return {
     spectrum: highestScore.score !== 0 ? highestScore.category : 'center',
-    confidence: Math.min(Math.abs(highestScore.score), 1)
+    confidence: adjustedConfidence  // Use confidence from keyword match as fallback
   };
 }
+
 
 // Initialize models on load
 (async () => {

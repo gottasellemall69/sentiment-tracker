@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFeedback } from '../redux/feedbackSlice';
 import { Upload } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { addFeedbackWithSentiment } from '../redux/feedbackSlice';
 import { analyzeChatLog } from '../utils/chatLogUtils';
 import { analyzeSentiment, predictPoliticalSpectrum } from '../utils/nlpUtils';
 
@@ -14,23 +13,26 @@ const ChatLogUploader = () => {
   const handleFileUpload = useCallback(async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-  
+
     try {
       const reader = new FileReader();
-      
       reader.onload = async (e) => {
         const text = e.target?.result;
-        const messages = await analyzeChatLog(text);
+        const messages = await analyzeChatLog(text);  // Parse uploaded chat log into messages
         const newFeedbackEntries = [];
-        
+
         for (const message of messages) {
-          const { spectrum: predictedSpectrum } = await predictPoliticalSpectrum(message.content);
+          const { spectrum: predictedSpectrum, confidence } = await predictPoliticalSpectrum(message.content);
           const sentiment = await analyzeSentiment(message.content);
+
           const feedbackEntry = {
             feedback: message.content,
-            politicalSpectrum: message.spectrum || predictedSpectrum,
-            predictedSpectrum,
-            sentiment,
+            politicalSpectrum: "N/A",  // Default to "N/A" unless provided explicitly
+            predictedSpectrum,  // Use the predicted spectrum from your function
+            sentiment: {
+              score: sentiment.score,
+              confidence: confidence,  // Include prediction confidence
+            },
             timestamp: message.timestamp,
             source: 'uploaded',
           };
@@ -44,7 +46,7 @@ const ChatLogUploader = () => {
           newFeedbackEntries.push(feedbackEntry);
         }
 
-        dispatch(setFeedback([...feedback, ...newFeedbackEntries]));
+        dispatch(setFeedback([...feedback, ...newFeedbackEntries]));  // Update Redux with new entries
         toast.success(`Successfully analyzed ${messages.length} messages`);
       };
 

@@ -14,8 +14,8 @@ function parseJSON(content) {
   const data = JSON.parse(content);
   if (Array.isArray(data)) {
     return data.map(msg => ({
-      content: msg.message || msg.content || msg.text || msg.feedback || '',
       timestamp: msg.timestamp ? new Date(msg.timestamp).getTime() : Date.now(),
+      content: msg.message || msg.content || msg.text || msg.feedback || '',
       spectrum: msg.spectrum || msg.politicalSpectrum || 'unspecified',
     }));
   }
@@ -23,33 +23,33 @@ function parseJSON(content) {
 }
 
 function parseCSV(content) {
-  const lines = content.split("'\n'");
+  const lines = content.split("\n");
   const headers = lines[0].toLowerCase().split(',');
-
-  const contentIndex = headers.findIndex(h =>
-    h.includes('message') || h.includes('content') || h.includes('text') || h.includes('feedback'));
   const timestampIndex = headers.findIndex(h =>
     h.includes('time') || h.includes('date') || h.includes('timestamp'));
+  const contentIndex = headers.findIndex(h =>
+    h.includes('message') || h.includes('content') || h.includes('text') || h.includes('feedback'));
   const spectrumIndex = headers.findIndex(h =>
     h.includes('spectrum') || h.includes('political') || h.includes('party') || h.includes('affiliation'));
 
   if (contentIndex === -1) throw new Error('No message content column found');
 
   return lines.slice(1).filter(line => line.trim()).map(line => {
-      const values = line.split(',');
-      return {
-        content: values[contentIndex].trim(),
-        timestamp: timestampIndex !== -1 ? new Date(values[timestampIndex]).getTime() : Date.now(),
-        spectrum: spectrumIndex !== -1 ? values[spectrumIndex]?.trim() : 'unspecified',
-      };
-    });
+    const values = line.split(',');
+    return {
+      timestamp: timestampIndex !== -1 ? new Date(values[timestampIndex]).getTime() : Date.now(),
+      content: values[contentIndex].trim(),
+      spectrum: spectrumIndex !== -1 ? values[spectrumIndex]?.trim() : 'unspecified',
+    };
+  });
 }
 
 function parsePlainText(content) {
   return content
     .split('\n')
     .filter(line => line.trim())
-    .map(line => ({ content: line.trim(), timestamp: Date.now(), spectrum: 'unspecified',
+    .map(line => ({
+      timestamp: Date.now(), content: line.trim(), spectrum: 'unspecified',
     }));
 }
 
