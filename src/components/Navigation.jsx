@@ -60,13 +60,13 @@ const Navigation = () => {
             </a>
             <span>
               <a
-                href="/dashboard"
+                href="/Dashboard"
                 rel="noopener noreferrer"
-                className={`flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors ${isActive('/dashboard')}`}
-                  >
-                    <MessageSquarePlus className="h-4 w-4 mr-2" />
-                    Admin Dashboard
-                  </a>
+                className={`flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors ${isActive('/Dashboard')}`}
+              >
+                <MessageSquarePlus className="h-4 w-4 mr-2" />
+                Admin Dashboard
+              </a>
               {user && (
 
                 <>
@@ -79,12 +79,12 @@ const Navigation = () => {
                 </>
               )}
             </span>
-            </div>
-
           </div>
+
         </div>
+      </div>
     </nav>
-    
+
   );
 };
 
