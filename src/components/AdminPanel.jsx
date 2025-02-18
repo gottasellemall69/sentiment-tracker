@@ -5,43 +5,43 @@ import { Filter, Download, SortAsc } from 'lucide-react';
 
 const AdminPanel = () => {
   const dispatch = useDispatch();
-  const feedback = useSelector(selectFeedback);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [filter, setFilter] = useState("");
-  const [sortBy, setSortBy] = useState("date");
+  const feedback = useSelector( selectFeedback );
+  const [ loading, setLoading ] = useState( true );
+  const [ error, setError ] = useState( null );
+  const [ filter, setFilter ] = useState( "" );
+  const [ sortBy, setSortBy ] = useState( "date" );
 
-  useEffect(() => {
+  useEffect( () => {
     const fetchFeedback = async () => {
       try {
-        setLoading(true);
-        const response = await fetch('/api/getfeedback');
-        if (!response.ok) throw new Error(`Error fetching feedback: ${response.statusText}`);
+        setLoading( true );
+        const response = await fetch( '/api/getfeedback' );
+        if ( !response.ok ) throw new Error( `Error fetching feedback: ${ response.statusText }` );
         const data = await response.json();
-        dispatch(setFeedback(data));
-      } catch (err) {
-        setError(err.message);
+        dispatch( setFeedback( data ) );
+      } catch ( err ) {
+        setError( err.message );
       } finally {
-        setLoading(false);
+        setLoading( false );
       }
     };
 
     fetchFeedback();
-  }, [dispatch]);
+  }, [ dispatch ] );
 
-  const filteredFeedback = useMemo(() => {
-    return feedback?.filter((item) =>
-      item.feedback.toLowerCase().includes(filter.toLowerCase()) ||
-      (item.politicalSpectrum || "").toLowerCase().includes(filter.toLowerCase()) ||
-      (item.predictedSpectrum || "").toLowerCase().includes(filter.toLowerCase())
-    ).sort((a, b) => {
-      if (sortBy === 'date') return new Date(b.timestamp) - new Date(a.timestamp);
+  const filteredFeedback = useMemo( () => {
+    return feedback?.filter( ( item ) =>
+      item.feedback.toLowerCase().includes( filter.toLowerCase() ) ||
+      ( item.politicalSpectrum || "" ).toLowerCase().includes( filter.toLowerCase() ) ||
+      ( item.predictedSpectrum || "" ).toLowerCase().includes( filter.toLowerCase() )
+    ).sort( ( a, b ) => {
+      if ( sortBy === 'date' ) return new Date( b.timestamp ) - new Date( a.timestamp );
       return b.sentiment.score - a.sentiment.score;
-    });
-  }, [feedback, filter, sortBy]);
+    } );
+  }, [ feedback, filter, sortBy ] );
 
-  if (loading) return <p className="text-center text-gray-500">Loading feedback data...</p>;
-  if (error) return <p className="text-center text-red-500">Error: {error}</p>;
+  if ( loading ) return <p className="text-center text-gray-500">Loading feedback data...</p>;
+  if ( error ) return <p className="text-center text-red-500">Error: { error }</p>;
 
   return (
     <div className="bg-white rounded-lg shadow p-6 h-[500px] overflow-y-auto">
@@ -52,13 +52,13 @@ const AdminPanel = () => {
           type="text"
           placeholder="Filter by text or spectrum..."
           className="px-3 py-2 border rounded-md"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          value={ filter }
+          onChange={ ( e ) => setFilter( e.target.value ) }
         />
         <select
           className="px-3 py-2 border rounded-md"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
+          value={ sortBy }
+          onChange={ ( e ) => setSortBy( e.target.value ) }
         >
           <option value="date">Sort by Date</option>
           <option value="sentiment">Sort by Sentiment</option>
@@ -79,38 +79,38 @@ const AdminPanel = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredFeedback?.map((item, index) => (
-              <tr key={index}>
+            { filteredFeedback?.map( ( item, index ) => (
+              <tr key={ index }>
                 <td className="px-6 py-4 text-sm text-gray-500">
-                  {new Date(item.timestamp).toLocaleString()}
+                  { new Date( item.timestamp ).toLocaleString() }
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-900">{item.feedback}</td>
+                <td className="px-6 py-4 text-sm text-gray-900">{ item.feedback }</td>
                 <td className="px-6 py-4 text-sm text-gray-500">
-                  {item.politicalSpectrum && item.politicalSpectrum !== "N/A" ? (
-                    <span><strong>Submitted:</strong> {item.politicalSpectrum}</span>
+                  { item.politicalSpectrum && item.politicalSpectrum !== "N/A" ? (
+                    <span><strong>Submitted:</strong> { item.politicalSpectrum }</span>
                   ) : (
-                    <span><strong>Predicted:</strong> {item.predictedSpectrum || "N/A"}</span>
-                  )}
+                    <span><strong>Predicted:</strong> { item.predictedSpectrum || "N/A" }</span>
+                  ) }
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${item.sentiment?.score > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
-                    {item.sentiment?.score?.toFixed(2) || 'N/A'}
+                  <span className={ `px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${ item.sentiment?.score > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }` }>
+                    { item.sentiment?.score?.toFixed( 2 ) || 'N/A' }
                   </span>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500">
-                  {item.sentiment?.confidence !== undefined
-                    ? Math.max((item.sentiment.confidence * 100).toFixed(1), 10) + "%"
-                    : "N/A"}
+                  { item?.sentiment[ 'confidence' ] !== undefined
+                    ? Math.max( ( item?.sentiment[ 'confidence' ] * 100 ).toFixed( 1 ), item?.sentiment[ 'confidence' ] ) + "%"
+                    : "N/A" }
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500">
-                  {item.sentiment?.topWords?.join(', ') || "N/A"}
+                  { item.sentiment?.topWords?.join( ', ' ) || "N/A" }
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-500">
-                  {item.source}
+                  { item.source }
                 </td>
               </tr>
-            ))}
+            ) ) }
           </tbody>
         </table>
       </div>

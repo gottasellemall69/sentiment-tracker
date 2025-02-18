@@ -1,75 +1,75 @@
-function detectFileFormat(content) {
+function detectFileFormat( content ) {
   try {
-    JSON.parse(content);
+    JSON.parse( content );
     return 'json';
   } catch {
-    if (content.includes(',') && content.split("'\n'")[0].includes(',')) {
+    if ( content.includes( ',' ) && content.split( "'\n'" )[ 0 ].includes( ',' ) ) {
       return 'csv';
     }
     return 'txt';
   }
 }
 
-function parseJSON(content) {
-  const data = JSON.parse(content);
-  if (Array.isArray(data)) {
-    return data.map(msg => ({
-      timestamp: msg.timestamp ? new Date(msg.timestamp).getTime() : Date.now(),
+function parseJSON( content ) {
+  const data = JSON.parse( content );
+  if ( Array.isArray( data ) ) {
+    return data.map( msg => ( {
+      timestamp: msg.timestamp ? new Date( msg.timestamp ).getTime() : Date.now(),
       content: msg.message || msg.content || msg.text || msg.feedback || '',
       spectrum: msg.spectrum || msg.politicalSpectrum || 'unspecified',
-    }));
+    } ) );
   }
-  throw new Error('Invalid JSON format');
+  throw new Error( 'Invalid JSON format' );
 }
 
-function parseCSV(content) {
-  const lines = content.split("\n");
-  const headers = lines[0].toLowerCase().split(',');
-  const timestampIndex = headers.findIndex(h =>
-    h.includes('time') || h.includes('date') || h.includes('timestamp'));
-  const contentIndex = headers.findIndex(h =>
-    h.includes('message') || h.includes('content') || h.includes('text') || h.includes('feedback'));
-  const spectrumIndex = headers.findIndex(h =>
-    h.includes('spectrum') || h.includes('political') || h.includes('party') || h.includes('affiliation'));
+function parseCSV( content ) {
+  const lines = content.split( "\n" );
+  const headers = lines[ 0 ].toLowerCase().split( ',' );
+  const timestampIndex = headers.findIndex( h =>
+    h.includes( 'time' ) || h.includes( 'date' ) || h.includes( 'timestamp' ) );
+  const contentIndex = headers.findIndex( h =>
+    h.includes( 'message' ) || h.includes( 'content' ) || h.includes( 'text' ) || h.includes( 'feedback' ) );
+  const spectrumIndex = headers.findIndex( h =>
+    h.includes( 'spectrum' ) || h.includes( 'political' ) || h.includes( 'party' ) || h.includes( 'affiliation' ) );
 
-  if (contentIndex === -1) throw new Error('No message content column found');
+  if ( contentIndex === -1 ) throw new Error( 'No message content column found' );
 
-  return lines.slice(1).filter(line => line.trim()).map(line => {
-    const values = line.split(',');
+  return lines.slice( 1 ).filter( line => line.trim() ).map( line => {
+    const values = line.split( ',' );
     return {
-      timestamp: timestampIndex !== -1 ? new Date(values[timestampIndex]).getTime() : Date.now(),
-      content: values[contentIndex].trim(),
-      spectrum: spectrumIndex !== -1 ? values[spectrumIndex]?.trim() : 'unspecified',
+      timestamp: timestampIndex !== -1 ? new Date( values[ timestampIndex ] ).getTime() : Date.now(),
+      content: values[ contentIndex ].trim(),
+      spectrum: spectrumIndex !== -1 ? values[ spectrumIndex ]?.trim() : 'unspecified',
     };
-  });
+  } );
 }
 
-function parsePlainText(content) {
+function parsePlainText( content ) {
   return content
-    .split('\n')
-    .filter(line => line.trim())
-    .map(line => ({
+    .split( '\n' )
+    .filter( line => line.trim() )
+    .map( line => ( {
       timestamp: Date.now(), content: line.trim(), spectrum: 'unspecified',
-    }));
+    } ) );
 }
 
-export async function analyzeChatLog(content) {
-  const format = detectFileFormat(content);
+export async function analyzeChatLog( content ) {
+  const format = detectFileFormat( content );
 
   let messages;
-  switch (format) {
+  switch ( format ) {
     case 'json':
-      messages = parseJSON(content);
+      messages = parseJSON( content );
       break;
     case 'csv':
-      messages = parseCSV(content);
+      messages = parseCSV( content );
       break;
     case 'txt':
-      messages = parsePlainText(content);
+      messages = parsePlainText( content );
       break;
     default:
-      throw new Error('Unsupported file format');
+      throw new Error( 'Unsupported file format' );
   }
 
-  return messages.filter(msg => msg.content.trim().length > 0);
+  return messages.filter( msg => msg.content.trim().length > 0 );
 }
