@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -11,40 +11,40 @@ import AdminPanel from '../components/AdminPanel';
 export default function Dashboard() {
   const isAdmin = false;
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [ user, setUser ] = useState( null );
   const dispatch = useDispatch();
-  const [feedback, setFeedback] = useState([{}]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
- 
+  const [ feedback, setFeedback ] = useState( [ {} ] );
+  const [ loading, setLoading ] = useState( true );
+  const [ error, setError ] = useState( null );
+
   // Fetch feedback data from the API
-  useEffect(() => {
+  useEffect( () => {
     const fetchFeedback = async () => {
       try {
-        setLoading(true);
-        const response = await fetch('/api/getfeedback');
-        if (!response.ok) {
-          throw new Error(`Error fetching feedback: ${response.statusText}`);
+        setLoading( true );
+        const response = await fetch( '/api/getfeedback' );
+        if ( !response.ok ) {
+          throw new Error( `Error fetching feedback: ${ response.statusText }` );
         }
         const data = await response.json();
-        setFeedback(data);
-      } catch (err) {
-        setError(err.message);
+        setFeedback( data );
+      } catch ( err ) {
+        setError( err.message );
       } finally {
-        setLoading(false);
+        setLoading( false );
       }
     };
 
     fetchFeedback();
-  }, [dispatch]);
+  }, [ dispatch ] );
 
   // Handle loading and error states
-  if (loading) {
+  if ( loading ) {
     return <p className="text-center text-gray-500">Loading feedback data...</p>;
   }
 
-  if (error) {
-    return <p className="text-center text-red-500">Error: {error}</p>;
+  if ( error ) {
+    return <p className="text-center text-red-500">Error: { error }</p>;
   }
 
   return (
@@ -54,27 +54,27 @@ export default function Dashboard() {
 
 
 
-     </div>
-        <div className="mb-6 w-full">
-            <ChatLogUploader />
-          </div>
-          
-       <div className=' mx-auto flex flex-wrap max-w-7xl'>
+      </div>
+      <div className="mb-6 w-full">
+        <ChatLogUploader />
+      </div>
+
+      <div className=' mx-auto flex flex-wrap max-w-7xl'>
         <div className="grid grid-cols-1 gap-6 w-full">
-        <div>
-          <FeedbackChart />
-        </div>
+          <div className='h-auto'>
+            <FeedbackChart />
+          </div>
           <div className="mt-6">
             <SentimentSummary />
           </div>
         </div>
       </div>
 
-        <div className="mt-8">
-          <AdminPanel
-            feedback={feedback}
-          />
-        </div>
+      <div className="mt-8">
+        <AdminPanel
+          feedback={ feedback }
+        />
+      </div>
     </div>
   );
 }

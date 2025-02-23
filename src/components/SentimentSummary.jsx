@@ -29,7 +29,7 @@ const SentimentSummary = () => {
     // Prefer politicalSpectrum if valid, else fallback to predictedSpectrum
     const spectrum = ( politicalSpectrum && politicalSpectrum !== "N/A" )
       ? politicalSpectrum
-      : predictedSpectrum || 'unspecified';
+      : predictedSpectrum || "N/A";
 
     if ( !acc[ spectrum ] ) acc[ spectrum ] = { count: 0, totalSentiment: 0, sources: {} };
     acc[ spectrum ].count++;
@@ -44,30 +44,30 @@ const SentimentSummary = () => {
   // Calculate overall sentiment
   const totalFeedback = feedback.length;
   const totalSentiment = feedback.reduce( ( acc, { sentiment } ) => acc + sentiment.score, 0 );
-  const avgOverallSentiment = totalFeedback ? totalSentiment / totalFeedback : 0;
+  const avgOverallSentiment = totalFeedback ? ( ( totalSentiment / totalFeedback ) ) : 0;
 
   // Get sentiment label based on average sentiment
   const getSentimentLabel = ( avgSentiment ) => {
-    if ( avgSentiment > 0.05 ) return "strongly positive";
-    if ( avgSentiment > 0.03 ) return "moderately positive";
-    if ( avgSentiment > 0.01 ) return "slightly positive";
-    if ( avgSentiment < -0.05 ) return "strongly negative";
-    if ( avgSentiment < -0.03 ) return "moderately negative";
-    if ( avgSentiment < -0.01 ) return "slightly negative";
+    if ( avgSentiment > 0.7 ) return "strongly positive";
+    if ( avgSentiment > 0.3 ) return "moderately positive";
+    if ( avgSentiment > 0.1 ) return "slightly positive";
+    if ( avgSentiment < -0.7 ) return "strongly negative";
+    if ( avgSentiment < -0.3 ) return "moderately negative";
+    if ( avgSentiment < -0.1 ) return "slightly negative";
     return "neutral";
   };
 
   // Get sentiment icon based on the score
   const getSentimentIcon = ( score ) => {
-    if ( score > 0.01 ) return <TrendingUp className="w-5 h-5" />;
-    if ( score < -0.01 ) return <TrendingDown className="w-5 h-5" />;
+    if ( score > 0.1 ) return <TrendingUp className="w-5 h-5" />;
+    if ( score < -0.1 ) return <TrendingDown className="w-5 h-5" />;
     return <Minus className="w-5 h-5" />;
   };
 
   // Get sentiment color for styling
   const getSentimentColor = ( score ) => {
-    if ( score > 0.01 ) return "text-green-600";
-    if ( score < -0.01 ) return "text-red-600";
+    if ( score > 0.1 ) return "text-green-600";
+    if ( score < -0.1 ) return "text-red-600";
     return "text-gray-600";
   };
 

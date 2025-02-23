@@ -44,7 +44,7 @@ const AdminPanel = () => {
   if ( error ) return <p className="text-center text-red-500">Error: { error }</p>;
 
   return (
-    <div className="bg-white rounded-lg shadow p-6 h-[500px] overflow-y-auto">
+    <div className="bg-white rounded-lg shadow p-6 h-[750px] overflow-y-auto">
       <h2 className="text-xl font-bold mb-4">Admin Panel</h2>
 
       <div className="mb-4 flex justify-between">

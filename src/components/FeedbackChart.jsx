@@ -12,52 +12,52 @@ import {
 } from 'chart.js';
 import { setFeedback, selectFeedback } from '../redux/feedbackSlice';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register( CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend );
 
 const FeedbackChart = () => {
   const dispatch = useDispatch();
-  const feedback = useSelector(selectFeedback);
-  console.log('Feedback entries:', feedback);
+  const feedback = useSelector( selectFeedback );
+  console.log( 'Feedback entries:', feedback );
 
-  useEffect(() => {
-    if (feedback.length === 0) {
+  useEffect( () => {
+    if ( feedback.length === 0 ) {
       const fetchFeedback = async () => {
         try {
-          const response = await fetch('/api/getfeedback');
-          if (!response.ok) throw new Error(`Error fetching feedback`);
+          const response = await fetch( '/api/getfeedback' );
+          if ( !response.ok ) throw new Error( `Error fetching feedback` );
           const data = await response.json();
-          dispatch(setFeedback(data));
-        } catch (error) {
-          console.error("Error loading feedback:", error);
+          dispatch( setFeedback( data ) );
+        } catch ( error ) {
+          console.error( "Error loading feedback:", error );
         }
       };
       fetchFeedback();
     }
-  }, [dispatch, feedback]);
+  }, [ dispatch, feedback ] );
 
   // Ensure feedback is an array before reducing
-  const groupedData = feedback.reduce((acc, { politicalSpectrum, predictedSpectrum, sentiment }) => {
+  const groupedData = feedback.reduce( ( acc, { politicalSpectrum, predictedSpectrum, sentiment } ) => {
     const spectrum = politicalSpectrum || predictedSpectrum || 'unspecified';
-    if (!acc[spectrum]) acc[spectrum] = { count: 0, totalSentiment: 0 };
-    acc[spectrum].count++;
-    acc[spectrum].totalSentiment += sentiment.score;
+    if ( !acc[ spectrum ] ) acc[ spectrum ] = { count: 0, totalSentiment: 0 };
+    acc[ spectrum ].count++;
+    acc[ spectrum ].totalSentiment += sentiment.score;
     return acc;
-  }, {});
-  
+  }, {} );
+
 
   const data = {
-    labels: Object.keys(groupedData),
+    labels: Object.keys( groupedData ),
     datasets: [
       {
         label: 'Number of Responses',
-        data: Object.values(groupedData).map((item) => item.count),
+        data: Object.values( groupedData ).map( ( item ) => item.count ),
         backgroundColor: 'rgba(54, 162, 235, 0.5)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1,
       },
       {
         label: 'Average Sentiment',
-        data: Object.values(groupedData).map((item) =>
+        data: Object.values( groupedData ).map( ( item ) =>
           item.count > 0 ? item.totalSentiment / item.count : 0
         ),
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
@@ -77,9 +77,9 @@ const FeedbackChart = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white rounded-lg shadow p-6 max-w-7xl mx-auto h-[300px]">
       <h2 className="text-xl font-bold mb-4">Sentiment Analysis</h2>
-      <Bar data={data} options={options} />
+      <Bar className='mx-auto w-full' data={ data } options={ options } />
     </div>
   );
 };

@@ -8,22 +8,22 @@ import { analyzeSentiment, predictPoliticalSpectrum } from '../utils/nlpUtils';
 
 const ChatLogUploader = () => {
   const dispatch = useDispatch();
-  const feedback = useSelector((state) => state.feedback.entries);
+  const feedback = useSelector( ( state ) => state.feedback.entries );
 
-  const handleFileUpload = useCallback(async (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const handleFileUpload = useCallback( async ( event ) => {
+    const file = event.target.files?.[ 0 ];
+    if ( !file ) return;
 
     try {
       const reader = new FileReader();
-      reader.onload = async (e) => {
+      reader.onload = async ( e ) => {
         const text = e.target?.result;
-        const messages = await analyzeChatLog(text);  // Parse uploaded chat log into messages
+        const messages = await analyzeChatLog( text );  // Parse uploaded chat log into messages
         const newFeedbackEntries = [];
 
-        for (const message of messages) {
-          const { spectrum: predictedSpectrum, confidence } = await predictPoliticalSpectrum(message.content);
-          const sentiment = await analyzeSentiment(message.content);
+        for ( const message of messages ) {
+          const { spectrum: predictedSpectrum, confidence } = await predictPoliticalSpectrum( message.content );
+          const sentiment = await analyzeSentiment( message.content );
 
           const feedbackEntry = {
             feedback: message.content,
@@ -37,25 +37,25 @@ const ChatLogUploader = () => {
             source: 'uploaded',
           };
 
-          await fetch('/api/feedback', {
+          await fetch( '/api/feedback', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(feedbackEntry),
-          });
+            body: JSON.stringify( feedbackEntry ),
+          } );
 
-          newFeedbackEntries.push(feedbackEntry);
+          newFeedbackEntries.push( feedbackEntry );
         }
 
-        dispatch(setFeedback([...feedback, ...newFeedbackEntries]));  // Update Redux with new entries
-        toast.success(`Successfully analyzed ${messages.length} messages`);
+        dispatch( setFeedback( [ ...feedback, ...newFeedbackEntries ] ) );  // Update Redux with new entries
+        toast.success( `Successfully analyzed ${ messages.length } messages` );
       };
 
-      reader.readAsText(file);
-    } catch (error) {
-      console.error('Error processing chat log:', error);
-      toast.error('Error processing chat log');
+      reader.readAsText( file );
+    } catch ( error ) {
+      console.error( 'Error processing chat log:', error );
+      toast.error( 'Error processing chat log' );
     }
-  }, [dispatch, feedback]);
+  }, [ dispatch, feedback ] );
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
@@ -73,7 +73,7 @@ const ChatLogUploader = () => {
             type="file"
             className="hidden"
             accept=".txt,.json,.csv"
-            onChange={handleFileUpload}
+            onChange={ handleFileUpload }
           />
         </label>
       </div>
