@@ -12,8 +12,6 @@ const Navigation = () => {
 
   useEffect( () => {
     const unsubscribe = onAuthStateChanged( auth, ( currentUser ) => {
-      console.log( "Navigation - Current User:", currentUser );
-      console.log( "Admin Email from env:", adminEmail );
 
       if ( currentUser && currentUser.email === adminEmail ) {
         setUser( currentUser );

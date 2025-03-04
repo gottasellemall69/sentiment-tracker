@@ -23,8 +23,6 @@ export default function Dashboard() {
 
   useEffect( () => {
     const unsubscribe = onAuthStateChanged( auth, ( currentUser ) => {
-      console.log( "Current User:", currentUser );
-      console.log( "Admin Email from env:", adminEmail );
 
       if ( !currentUser || currentUser.email !== adminEmail ) {
         router.push( "/login" );

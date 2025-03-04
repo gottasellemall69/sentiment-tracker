@@ -44,7 +44,7 @@ const FeedbackForm = () => {
       toast.error( 'Feedback must be at least 10 characters long.' );
       return false;
     }
-    if ( feedback.length > 10000 ) {
+    if ( feedback.length > 1000 ) {
       toast.error( 'Feedback must not exceed 10000 characters.' );
       return false;
     }
@@ -157,9 +157,9 @@ const FeedbackForm = () => {
           onChange={ ( e ) => setFeedback( e.target.value ) }
           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-none"
           placeholder="Share your thoughts..."
-          maxLength={ 10000 }
+          maxLength={ 1000 }
         />
-        <div className="text-xs text-gray-500 text-right">{ feedback.length }/10000</div>
+        <div className="text-xs text-gray-500 text-right">{ feedback.length }/1000</div>
       </div>
 
       <div>
