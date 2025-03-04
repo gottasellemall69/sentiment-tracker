@@ -37,37 +37,37 @@ const POLITICAL_CATEGORIES = {
   'far-left': {
     keywords: [ 'revolution', 'socialism', 'communist', 'abolish', 'collective', 'workers rights', 'class struggle' ],
     contextual: [ 'wealth redistribution', 'state ownership', 'planned economy' ],
-    weight: 1.0
+    weight: 0.8
   },
   'left': {
     keywords: [ 'progressive', 'welfare', 'regulation', 'equality', 'reform', 'workers', 'unions' ],
     contextual: [ 'social programs', 'public services', 'environmental protection' ],
-    weight: 0.8
+    weight: 0.5
   },
   'center-left': {
     keywords: [ 'liberal', 'public option', 'social', 'healthcare', 'education' ],
     contextual: [ 'mixed economy', 'regulated markets', 'social safety net' ],
-    weight: 0.6
+    weight: 0.3
   },
   'center': {
     keywords: [ 'moderate', 'compromise', 'balance', 'bipartisan', 'pragmatic' ],
     contextual: [ 'common ground', 'practical solutions', 'middle way' ],
-    weight: 0.5
+    weight: 0.0
   },
   'center-right': {
     keywords: [ 'conservative', 'tradition', 'market', 'fiscal', 'values' ],
     contextual: [ 'free enterprise', 'limited government', 'personal responsibility' ],
-    weight: 0.6
+    weight: 0.3
   },
   'right': {
     keywords: [ 'freedom', 'liberty', 'deregulation', 'privatize', 'tax cuts' ],
     contextual: [ 'free market', 'individual rights', 'small government' ],
-    weight: 0.8
+    weight: 0.5
   },
   'far-right': {
     keywords: [ 'nationalist', 'sovereignty', 'patriot', 'traditional', 'strong' ],
     contextual: [ 'national identity', 'cultural preservation', 'law and order' ],
-    weight: 1.0
+    weight: 0.8
   }
 };
 
@@ -114,16 +114,16 @@ export async function analyzeSentiment( text ) {
     }
 
     // Step 3: Combined Analysis
-    const finalScore = ( lexicalScore * 0.2 + transformerScore * 0.4 );
+    const finalScore = ( lexicalScore * 0.4 + transformerScore * 0.6 );
     const normalizedScore = Math.max( Math.min( finalScore, 1 ), -1 );
 
     // Step 4: Determine Final Sentiment
     if ( Math.abs( normalizedScore ) < 0.1 ) {
       sentimentLabel = "neutral";
     } else if ( normalizedScore > 0 ) {
-      sentimentLabel = normalizedScore > 0.75 ? "very positive" : "positive";
+      sentimentLabel = normalizedScore > 0.5 ? "very positive" : "positive";
     } else {
-      sentimentLabel = normalizedScore < -0.75 ? "very negative" : "negative";
+      sentimentLabel = normalizedScore < -0.5 ? "very negative" : "negative";
     }
 
     return {
@@ -162,9 +162,9 @@ export async function predictPoliticalSpectrum( text ) {
         const transformerConfidence = result[ 0 ].score;
 
         // Only use transformer result if confidence is high
-        if ( transformerConfidence > 0.6 ) {
+        if ( transformerConfidence > 0.8 ) {
           return {
-            spectrum: result[ 0 ].label === 'POSITIVE' ? 'left' : 'right',
+            spectrum: result[ 0 ].label === 'POSITIVE' ? 'right' : 'left',
             confidence: transformerConfidence
           };
         }
@@ -187,7 +187,7 @@ export async function predictPoliticalSpectrum( text ) {
         } else {
           // Multi-word keyword
           if ( lowercaseText.includes( keyword ) ) {
-            score += data.weight * 2; // Higher weight for phrase matches
+            score += data.weight * 1.5; // Higher weight for phrase matches
           }
         }
       } );
@@ -195,7 +195,7 @@ export async function predictPoliticalSpectrum( text ) {
       // Contextual analysis
       data.contextual.forEach( context => {
         if ( lowercaseText.includes( context.toLowerCase() ) ) {
-          score += data.weight * 0.7;
+          score += data.weight * 0.8;
         }
       } );
 
@@ -209,11 +209,11 @@ export async function predictPoliticalSpectrum( text ) {
 
     // Calculate confidence based on score difference
     const scoreDifference = highestScore.score - secondHighestScore.score;
-    const confidence = Math.min( Math.max( scoreDifference * 0.5, 0.3 ), 1 );
+    const confidence = Math.min( Math.max( scoreDifference * 0.3, 0.1 ), 1 );
 
     // Return center if no strong signals
-    if ( highestScore.score < 0.3 ) {
-      return { spectrum: 'center', confidence: 0.1 };
+    if ( highestScore.score < 0.2 ) {
+      return { spectrum: 'center', confidence: 0.3 };
     }
 
     return {
@@ -222,7 +222,7 @@ export async function predictPoliticalSpectrum( text ) {
     };
   } catch ( error ) {
     console.error( 'Political spectrum prediction failed:', error );
-    return { spectrum: 'center', confidence: 0.3 };
+    return { spectrum: 'center', confidence: 0.1 };
   }
 }
 
