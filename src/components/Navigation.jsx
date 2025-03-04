@@ -5,34 +5,37 @@ import { Activity, BarChart2, MessageSquarePlus } from 'lucide-react';
 import { auth } from "../config/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL;
-
 const Navigation = () => {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [ user, setUser ] = useState( null );
+  const adminEmail = process.env.NEXT_PUBLIC_FIREBASE_ADMIN_EMAIL; // ✅ Use direct variable
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser && currentUser.email === ADMIN_EMAIL) {
-        setUser(currentUser);
+  useEffect( () => {
+    const unsubscribe = onAuthStateChanged( auth, ( currentUser ) => {
+      console.log( "Navigation - Current User:", currentUser );
+      console.log( "Admin Email from env:", adminEmail );
+
+      if ( currentUser && currentUser.email === adminEmail ) {
+        setUser( currentUser );
       } else {
-        setUser(null);
+        setUser( null );
       }
-    });
-    return () => unsubscribe();
-  }, []);
+    } );
 
+    return () => unsubscribe();
+  }, [] );
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      router.push("/login"); // Redirect to login page after logout
-    } catch (error) {
-      console.error("Error logging out:", error);
+      await signOut( auth );
+      router.push( "/login" );
+    } catch ( error ) {
+      console.error( "Error logging out:", error );
     }
   };
 
-  const isActive = (path) => {
+
+  const isActive = ( path ) => {
     return router.pathname === path ? 'bg-blue-800' : '';
   };
 
@@ -53,7 +56,7 @@ const Navigation = () => {
             <a
               href="/"
               rel="noopener noreferrer"
-              className={`flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors ${isActive('/')}`}
+              className={ `flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors ${ isActive( '/' ) }` }
             >
               <BarChart2 className="h-4 w-4 mr-2" />
               Submit Opinion
@@ -62,23 +65,24 @@ const Navigation = () => {
               <a
                 href="/Dashboard"
                 rel="noopener noreferrer"
-                className={`flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors ${isActive('/Dashboard')}`}
+                className={ `flex items-center px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors ${ isActive( '/Dashboard' ) }` }
               >
                 <MessageSquarePlus className="h-4 w-4 mr-2" />
                 Admin Dashboard
               </a>
-              {user && (
 
-                <>
-                  <button
-                    onClick={handleLogout}
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
-                  >
-                    Logout
-                  </button>
-                </>
-              )}
             </span>
+            { user && (
+
+              <span>
+                <button
+                  onClick={ handleLogout }
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+                >
+                  Logout
+                </button>
+              </span>
+            ) }
           </div>
 
         </div>
