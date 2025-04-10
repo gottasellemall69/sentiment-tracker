@@ -33,16 +33,17 @@ export async function initializeModels() {
 }
 
 // Political spectrum categories with weighted keywords and contextual rules
+
 const POLITICAL_CATEGORIES = {
   'far-left': {
     keywords: [ 'revolution', 'socialism', 'communist', 'abolish', 'collective', 'workers rights', 'class struggle' ],
     contextual: [ 'wealth redistribution', 'state ownership', 'planned economy' ],
-    weight: 0.8
+    weight: 1.0
   },
   'left': {
     keywords: [ 'progressive', 'welfare', 'regulation', 'equality', 'reform', 'workers', 'unions' ],
     contextual: [ 'social programs', 'public services', 'environmental protection' ],
-    weight: 0.5
+    weight: 0.6
   },
   'center-left': {
     keywords: [ 'liberal', 'public option', 'social', 'healthcare', 'education' ],
@@ -62,14 +63,15 @@ const POLITICAL_CATEGORIES = {
   'right': {
     keywords: [ 'freedom', 'liberty', 'deregulation', 'privatize', 'tax cuts' ],
     contextual: [ 'free market', 'individual rights', 'small government' ],
-    weight: 0.5
+    weight: 0.6
   },
   'far-right': {
     keywords: [ 'nationalist', 'sovereignty', 'patriot', 'traditional', 'strong' ],
     contextual: [ 'national identity', 'cultural preservation', 'law and order' ],
-    weight: 0.8
+    weight: 1.0
   }
 };
+
 
 // Improved Sentiment Analysis Function
 export async function analyzeSentiment( text ) {
