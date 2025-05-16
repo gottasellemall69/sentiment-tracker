@@ -19,8 +19,14 @@ export async function initializeModels() {
     }
 
     // Initialize both pipelines with specific models
-    textClassificationPipeline = await pipeline( 'text-classification', 'Xenova/distilbert-base-uncased-finetuned-sst-2-english' );
-    sentimentPipeline = await pipeline( 'text-classification', 'Xenova/distilbert-base-uncased-finetuned-sst-2-english' );
+    textClassificationPipeline = await pipeline(
+      'sentiment-analysis', 'Xenova/distilbert-base-uncased-finetuned-sst-2-english', {
+      dtype: 'q4'
+    } );
+    sentimentPipeline = await pipeline(
+      'sentiment-analysis', 'Xenova/distilbert-base-uncased-finetuned-sst-2-english', {
+      dtype: 'q4'
+    } );
 
     console.log( 'NLP models initialized successfully' );
   } catch ( error ) {
@@ -33,7 +39,6 @@ export async function initializeModels() {
 }
 
 // Political spectrum categories with weighted keywords and contextual rules
-
 const POLITICAL_CATEGORIES = {
   'far-left': {
     keywords: [ 'revolution', 'socialism', 'communist', 'abolish', 'collective', 'workers rights', 'class struggle' ],
@@ -43,27 +48,27 @@ const POLITICAL_CATEGORIES = {
   'left': {
     keywords: [ 'progressive', 'welfare', 'regulation', 'equality', 'reform', 'workers', 'unions' ],
     contextual: [ 'social programs', 'public services', 'environmental protection' ],
-    weight: 0.6
+    weight: 1.0
   },
   'center-left': {
     keywords: [ 'liberal', 'public option', 'social', 'healthcare', 'education' ],
     contextual: [ 'mixed economy', 'regulated markets', 'social safety net' ],
-    weight: 0.3
+    weight: 1.0
   },
   'center': {
     keywords: [ 'moderate', 'compromise', 'balance', 'bipartisan', 'pragmatic' ],
     contextual: [ 'common ground', 'practical solutions', 'middle way' ],
-    weight: 0.0
+    weight: 1.0
   },
   'center-right': {
     keywords: [ 'conservative', 'tradition', 'market', 'fiscal', 'values' ],
     contextual: [ 'free enterprise', 'limited government', 'personal responsibility' ],
-    weight: 0.3
+    weight: 1.0
   },
   'right': {
     keywords: [ 'freedom', 'liberty', 'deregulation', 'privatize', 'tax cuts' ],
     contextual: [ 'free market', 'individual rights', 'small government' ],
-    weight: 0.6
+    weight: 1.0
   },
   'far-right': {
     keywords: [ 'nationalist', 'sovereignty', 'patriot', 'traditional', 'strong' ],
@@ -71,7 +76,6 @@ const POLITICAL_CATEGORIES = {
     weight: 1.0
   }
 };
-
 
 // Improved Sentiment Analysis Function
 export async function analyzeSentiment( text ) {
@@ -107,7 +111,7 @@ export async function analyzeSentiment( text ) {
     if ( sentimentPipeline ) {
       try {
         const result = await sentimentPipeline( text, { truncation: true } );
-        transformerScore = result[ 0 ].label === 'POSITIVE' ? result[ 0 ].score : -result[ 0 ].score;
+        transformerScore = result[ 0 ].label === 'NEGATIVE' ? result[ 0 ].score : -result[ 0 ].score;
         confidence = result[ 0 ].score;
         sentimentLabel = result[ 0 ].label.toLowerCase();
       } catch ( error ) {
@@ -166,7 +170,7 @@ export async function predictPoliticalSpectrum( text ) {
         // Only use transformer result if confidence is high
         if ( transformerConfidence > 0.8 ) {
           return {
-            spectrum: result[ 0 ].label === 'POSITIVE' ? 'right' : 'left',
+            spectrum: result[ 0 ].label === 'NEGATIVE' ? 'right' : 'left',
             confidence: transformerConfidence
           };
         }

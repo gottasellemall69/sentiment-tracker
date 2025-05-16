@@ -24,7 +24,7 @@ dist-ssr
 *.sw?
 .env.local
 .env
-repomix-output.txt
+repomix-output.*
 utils/parsetool.js
 .next
 project_structure.txt
