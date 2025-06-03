@@ -7,7 +7,6 @@ let textClassificationPipeline = null;
 let sentimentPipeline = null;
 let isInitializing = false;
 
-// Initialize NLP Models
 export async function initializeModels() {
   if ( textClassificationPipeline || sentimentPipeline || isInitializing ) return;
   isInitializing = true;
@@ -18,7 +17,6 @@ export async function initializeModels() {
       await tf.setBackend( 'cpu' );
     }
 
-    // Initialize both pipelines with specific models
     textClassificationPipeline = await pipeline(
       'sentiment-analysis', 'Xenova/distilbert-base-uncased-finetuned-sst-2-english', {
       dtype: 'q4'
@@ -38,7 +36,6 @@ export async function initializeModels() {
   }
 }
 
-// Political spectrum categories with weighted keywords and contextual rules
 const POLITICAL_CATEGORIES = {
   'far-left': {
     keywords: [ 'revolution', 'socialism', 'communist', 'abolish', 'collective', 'workers rights', 'class struggle' ],
@@ -77,7 +74,6 @@ const POLITICAL_CATEGORIES = {
   }
 };
 
-// Improved Sentiment Analysis Function
 export async function analyzeSentiment( text ) {
   if ( !text?.trim() ) {
     return {
@@ -94,16 +90,13 @@ export async function analyzeSentiment( text ) {
       await initializeModels();
     }
 
-    // Step 1: Lexical-Based Analysis
     const lexicalSentiment = sentiment.analyze( text );
     const lexicalScore = lexicalSentiment.score / Math.max( lexicalSentiment.tokens.length, 1 );
 
-    // Extract significant words
     const topWords = lexicalSentiment.words.length > 0
       ? lexicalSentiment.words.slice( 0, 5 )
       : text.split( ' ' ).filter( word => word.length > 3 ).slice( 0, 3 );
 
-    // Step 2: Transformer-Based Analysis
     let transformerScore = 0;
     let confidence = 0;
     let sentimentLabel = "neutral";
@@ -119,11 +112,9 @@ export async function analyzeSentiment( text ) {
       }
     }
 
-    // Step 3: Combined Analysis
     const finalScore = ( lexicalScore * 0.4 + transformerScore * 0.6 );
     const normalizedScore = Math.max( Math.min( finalScore, 1 ), -1 );
 
-    // Step 4: Determine Final Sentiment
     if ( Math.abs( normalizedScore ) < 0.1 ) {
       sentimentLabel = "neutral";
     } else if ( normalizedScore > 0 ) {
@@ -151,7 +142,6 @@ export async function analyzeSentiment( text ) {
   }
 }
 
-// Improved Political Spectrum Prediction
 export async function predictPoliticalSpectrum( text ) {
   if ( !text?.trim() ) {
     return { spectrum: 'center', confidence: 0 };
@@ -161,13 +151,11 @@ export async function predictPoliticalSpectrum( text ) {
   const words = lowercaseText.split( /\s+/ );
 
   try {
-    // Step 1: Transformer-Based Classification
     if ( textClassificationPipeline ) {
       try {
         const result = await textClassificationPipeline( text, { truncation: true } );
         const transformerConfidence = result[ 0 ].score;
 
-        // Only use transformer result if confidence is high
         if ( transformerConfidence > 0.8 ) {
           return {
             spectrum: result[ 0 ].label === 'NEGATIVE' ? 'right' : 'left',
@@ -179,26 +167,21 @@ export async function predictPoliticalSpectrum( text ) {
       }
     }
 
-    // Step 2: Enhanced Keyword Analysis
     let categoryScores = Object.entries( POLITICAL_CATEGORIES ).map( ( [ category, data ] ) => {
       let score = 0;
 
-      // Direct keyword matches
       data.keywords.forEach( keyword => {
         const keywordWords = keyword.toLowerCase().split( /\s+/ );
         if ( keywordWords.length === 1 ) {
-          // Single word keyword
           const matches = words.filter( word => word === keyword ).length;
           score += matches * data.weight;
         } else {
-          // Multi-word keyword
           if ( lowercaseText.includes( keyword ) ) {
-            score += data.weight * 1.5; // Higher weight for phrase matches
+            score += data.weight * 1.5;
           }
         }
       } );
 
-      // Contextual analysis
       data.contextual.forEach( context => {
         if ( lowercaseText.includes( context.toLowerCase() ) ) {
           score += data.weight * 0.8;
@@ -208,16 +191,13 @@ export async function predictPoliticalSpectrum( text ) {
       return { category, score };
     } );
 
-    // Sort by score and get the highest
     categoryScores.sort( ( a, b ) => b.score - a.score );
     const highestScore = categoryScores[ 0 ];
     const secondHighestScore = categoryScores[ 1 ];
 
-    // Calculate confidence based on score difference
     const scoreDifference = highestScore.score - secondHighestScore.score;
     const confidence = Math.min( Math.max( scoreDifference * 0.3, 0.1 ), 1 );
 
-    // Return center if no strong signals
     if ( highestScore.score < 0.2 ) {
       return { spectrum: 'center', confidence: 0.3 };
     }
@@ -232,11 +212,10 @@ export async function predictPoliticalSpectrum( text ) {
   }
 }
 
-// Initialize models on load
 ( async () => {
   try {
     await initializeModels();
   } catch ( error ) {
     console.warn( 'Initial model load failed, will retry on first use:', error );
   }
-} )();
+})();
