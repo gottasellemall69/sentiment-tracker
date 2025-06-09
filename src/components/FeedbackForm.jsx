@@ -11,12 +11,14 @@ const SUBMISSION_WINDOW = 3600000; // 1 hour in milliseconds
 
 const FeedbackForm = () => {
   const dispatch = useDispatch();
+  const recaptchaRef = useRef( null );
+
   const [ feedback, setFeedback ] = useState( '' );
   const [ politicalSpectrum, setPoliticalSpectrum ] = useState( '' );
   const [ predictedSpectrum, setPredictedSpectrum ] = useState( '' );
+  const [ politicalScore, setPoliticalScore ] = useState( 0 );
   const [ honeypot, setHoneypot ] = useState( '' );
   const [ isSubmitting, setIsSubmitting ] = useState( false );
-  const recaptchaRef = useRef( null );
 
   const getSubmissionHistory = () => {
     const history = localStorage.getItem( 'feedbackSubmissions' );
@@ -26,17 +28,26 @@ const FeedbackForm = () => {
   const updateSubmissionHistory = () => {
     const now = Date.now();
     const updatedHistory = getSubmissionHistory().filter(
-      ( timestamp ) => now - timestamp < SUBMISSION_WINDOW
+      timestamp => now - timestamp < SUBMISSION_WINDOW
     );
     updatedHistory.push( now );
     localStorage.setItem( 'feedbackSubmissions', JSON.stringify( updatedHistory ) );
   };
 
   const isRateLimited = () => {
-    const history = getSubmissionHistory().filter(
-      ( timestamp ) => Date.now() - timestamp < SUBMISSION_WINDOW
-    );
-    return history.length >= SUBMISSION_LIMIT;
+    return getSubmissionHistory()
+      .filter( timestamp => Date.now() - timestamp < SUBMISSION_WINDOW )
+      .length >= SUBMISSION_LIMIT;
+  };
+
+  const containsSuspiciousPatterns = ( text ) => {
+    const spamPatterns = [
+      /<[^>]*>/g, // HTML tags
+      /\b(https?:\/\/|www\.)\S+/gi, // URLs
+      /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, // Emails
+      /(.)\1{4,}/g, // Repeated characters
+    ];
+    return spamPatterns.some( ( pattern ) => pattern.test( text ) );
   };
 
   const validateInput = () => {
@@ -45,7 +56,7 @@ const FeedbackForm = () => {
       return false;
     }
     if ( feedback.length > 1000 ) {
-      toast.error( 'Feedback must not exceed 10000 characters.' );
+      toast.error( 'Feedback must not exceed 1000 characters.' );
       return false;
     }
     if ( honeypot ) {
@@ -60,16 +71,6 @@ const FeedbackForm = () => {
     return true;
   };
 
-  const containsSuspiciousPatterns = ( text ) => {
-    const spamPatterns = [
-      /<[^>]*>/g, // HTML tags
-      /\b(https?:\/\/|www\.)\S+/gi, // URLs
-      /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, // Emails
-      /(.)\1{4,}/g, // Repeated characters
-    ];
-    return spamPatterns.some( ( pattern ) => pattern.test( text ) );
-  };
-
   const handleSubmit = async ( e ) => {
     e.preventDefault();
     if ( isSubmitting ) return;
@@ -79,16 +80,16 @@ const FeedbackForm = () => {
     }
     if ( !validateInput() ) return;
 
+    setIsSubmitting( true );
     try {
-      setIsSubmitting( true );
-
       const recaptchaValue = await recaptchaRef.current?.executeAsync();
       if ( !recaptchaValue ) {
         toast.error( 'Please complete the reCAPTCHA verification.' );
+        setIsSubmitting( false );
         return;
       }
 
-      const { spectrum: predictedSpectrum, confidence } = await predictPoliticalSpectrum( feedback.trim() );
+      const { spectrum: predictedSpectrum, confidence, politicalScore: score } = await predictPoliticalSpectrum( feedback.trim() );
       const sentiment = await analyzeSentiment( feedback.trim() );
 
       const response = await fetch( '/api/feedback', {
@@ -98,6 +99,7 @@ const FeedbackForm = () => {
           feedback: feedback.trim(),
           politicalSpectrum,
           predictedSpectrum,
+          politicalScore: score,
           sentiment: {
             score: sentiment.score,
             magnitude: sentiment.magnitude,
@@ -121,8 +123,8 @@ const FeedbackForm = () => {
       setFeedback( '' );
       setPoliticalSpectrum( '' );
       setPredictedSpectrum( predictedSpectrum );
+      setPoliticalScore( score );
       recaptchaRef.current?.reset();
-
     } catch ( error ) {
       console.error( 'Error submitting feedback:', error );
       toast.error( error.message || 'An unexpected error occurred.' );
@@ -154,7 +156,7 @@ const FeedbackForm = () => {
           id="feedback"
           rows={ 4 }
           value={ feedback }
-          onChange={ ( e ) => setFeedback( e.target.value ) }
+          onChange={ e => setFeedback( e.target.value ) }
           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-none"
           placeholder="Share your thoughts..."
           maxLength={ 1000 }
@@ -169,7 +171,7 @@ const FeedbackForm = () => {
         <select
           id="spectrum"
           value={ politicalSpectrum }
-          onChange={ ( e ) => setPoliticalSpectrum( e.target.value ) }
+          onChange={ e => setPoliticalSpectrum( e.target.value ) }
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
         >
           <option value="">Select Position (optional)</option>
@@ -205,13 +207,26 @@ const FeedbackForm = () => {
         { isSubmitting ? 'Submitting...' : 'Submit Feedback' }
       </button>
 
-      { predictedSpectrum && (
-        <div className="mt-4 text-center text-green-600 font-medium">
-          Predicted Spectrum: <span>{ predictedSpectrum }</span>
+      { ( predictedSpectrum || politicalSpectrum ) && (
+        <div className="mt-4 text-center space-y-1">
+          { politicalSpectrum && (
+            <p className="text-gray-700">
+              <strong>You stated:</strong> { politicalSpectrum }
+            </p>
+          ) }
+          { predictedSpectrum && (
+            <p className="text-green-600 font-medium">
+              <strong>Predicted:</strong> { predictedSpectrum }
+            </p>
+          ) }
+          <p className="text-blue-600">
+            <strong>Political Score:</strong> { politicalScore.toFixed( 2 ) }
+          </p>
         </div>
       ) }
     </form>
   );
 };
+
 
 export default FeedbackForm;

@@ -36,42 +36,208 @@ export async function initializeModels() {
   }
 }
 
-const POLITICAL_CATEGORIES = {
+export const POLITICAL_CATEGORIES = {
+  // Far-Left
   'far-left': {
-    keywords: [ 'revolution', 'socialism', 'communist', 'abolish', 'collective', 'workers rights', 'class struggle' ],
+    keywords: [
+      'tax the rich', 'soak the rich', 'wealth tax',
+      'climate justice', 'environmental justice',
+      'defund the police', 'abolish the police', 'end police funding',
+      'abolish capitalism', 'smash capitalism', 'no to private enterprise',
+      'end private prisons', 'prison abolition', 'close for-profit prisons',
+      'solidarity forever', 'worker solidarity', 'union power',
+      'worker revolution', 'proletarian revolution', 'global workers uprising',
+      'class struggle', 'rich vs. poor', 'bottom-up power',
+      'redistribute wealth', 'wealth redistribution', 'equal share of resources',
+      'dismantle patriarchy', 'gender liberation', 'end patriarchal systems',
+      'seize the means', 'take the means of production',
+      'power to the people', 'people power', 'mass empowerment',
+      'organize the masses', 'mass organization', 'grassroots uprising',
+      'revolution now', 'immediate uprising', 'overthrow the system',
+      'systemic oppression', 'institutional oppression',
+      'smash the state', 'tear down the state',
+      'anti-imperialism', 'no empire', 'end foreign domination',
+      'people’s liberation', 'liberate the people',
+      'workers of the world', 'international proletariat',
+      'direct action', 'take direct action'
+    ],
     contextual: [ 'wealth redistribution', 'state ownership', 'planned economy' ],
     weight: 1.0
   },
+
+  // Left
   'left': {
-    keywords: [ 'progressive', 'welfare', 'regulation', 'equality', 'reform', 'workers', 'unions' ],
+    keywords: [
+      'universal healthcare', 'single payer healthcare',
+      'income inequality', 'wealth gap', 'economic disparity',
+      'affordable housing', 'housing for all',
+      'green new deal', 'environmental overhaul',
+      'fight racism', 'combat racism', 'anti-racist policies',
+      'women’s rights', 'gender equality',
+      'lgbtq+ rights', 'queer liberation',
+      'living wage', 'fair wage', 'minimum decent wage',
+      'social justice', 'fairness for all',
+      'corporate accountability', 'hold corporations accountable',
+      'climate action', 'act on climate change',
+      'protect medicare', 'save medicare',
+      'expand social safety net', 'strengthen social programs',
+      'stop voter suppression', 'end voter disenfranchisement',
+      'fund public schools', 'invest in education',
+      'raise minimum wage', 'increase base pay',
+      'clean energy jobs', 'renewable energy employment',
+      'protect reproductive rights', 'defend abortion access',
+      'end discrimination', 'fight bias',
+      'community investment', 'invest in communities'
+    ],
     contextual: [ 'social programs', 'public services', 'environmental protection' ],
     weight: 1.0
   },
+
+  // Center-Left
   'center-left': {
-    keywords: [ 'liberal', 'public option', 'social', 'healthcare', 'education' ],
+    keywords: [
+      'common sense', 'practical solutions',
+      'bipartisan', 'cross-party cooperation',
+      'balanced approach', 'well-rounded policy',
+      'moderate', 'centrist leanings',
+      'incremental change', 'step-by-step reform',
+      'working families', 'family-focused policy',
+      'bridge divides', 'close partisan gaps',
+      'pragmatic solutions', 'real-world fixes',
+      'responsible spending', 'fiscally cautious',
+      'public-private partnership', 'govt-business collaboration',
+      'fiscal prudence', 'budget discipline',
+      'evidence-based policy', 'data-driven decisions',
+      'smart regulation', 'targeted oversight',
+      'centrist coalition', 'broad alliance',
+      'across the aisle', 'bipartisan support',
+      'consensus building', 'finding middle ground',
+      'steady progress', 'gradual improvement',
+      'middle path', 'third way',
+      'thoughtful reform', 'considered change',
+      'inclusive growth', 'growth for all'
+    ],
     contextual: [ 'mixed economy', 'regulated markets', 'social safety net' ],
     weight: 1.0
   },
+
+  // Center
   'center': {
-    keywords: [ 'moderate', 'compromise', 'balance', 'bipartisan', 'pragmatic' ],
+    keywords: [
+      'neutral', 'impartial',
+      'objective', 'unbiased',
+      'balanced', 'equitable',
+      'nonpartisan', 'apolitical',
+      'status quo', 'existing order',
+      'steady hand', 'calm leadership',
+      'middle ground', 'common ground',
+      'centrist', 'moderate stance',
+      'equilibrium', 'stability',
+      'clear-eyed', 'level-headed',
+      'measured response', 'calm reaction',
+      'no spin', 'straight talk',
+      'fact-based', 'evidence-first',
+      'sound judgment', 'good sense',
+      'unbiased', 'fair-minded',
+      'moderation', 'restraint',
+      'pragmatic', 'realistic',
+      'steady leadership', 'reliable governance'
+    ],
     contextual: [ 'common ground', 'practical solutions', 'middle way' ],
     weight: 1.0
   },
+
+  // Center-Right
   'center-right': {
-    keywords: [ 'conservative', 'tradition', 'market', 'fiscal', 'values' ],
+    keywords: [
+      'fiscal responsibility', 'budget responsibility',
+      'market reform', 'economic liberalization',
+      'strong defense', 'robust military',
+      'tax cuts', 'lower taxes',
+      'limit government', 'shrink govt',
+      'free enterprise', 'entrepreneurial freedom',
+      'individual liberty', 'personal freedom',
+      'economic growth', 'growth economy',
+      'prudent regulation', 'limited oversight',
+      'public safety', 'lawful order',
+      'small businesses', 'mom-and-pop shops',
+      'job creators', 'employers first',
+      'balanced budget', 'budget balance',
+      'defense spending', 'defense investment',
+      'secure borders', 'border enforcement',
+      'property rights', 'private property',
+      'entrepreneurship', 'startup culture',
+      'sound money', 'monetary stability',
+      'reduce red tape', 'cut bureaucracy',
+      'lawful immigration', 'legal immigration'
+    ],
     contextual: [ 'free enterprise', 'limited government', 'personal responsibility' ],
     weight: 1.0
   },
+
+  // Right
   'right': {
-    keywords: [ 'freedom', 'liberty', 'deregulation', 'privatize', 'tax cuts' ],
+    keywords: [
+      'traditional values', 'conservative values',
+      'family values', 'family first',
+      'patriotism', 'love of country',
+      'law and order', 'tough on crime',
+      'second amendment', 'gun rights',
+      'border security', 'secure borders',
+      'small government', 'limited govt',
+      'personal responsibility', 'self-reliance',
+      'rule of law', 'legal order',
+      'American exceptionalism', 'US exceptionalism',
+      'pro-life', 'anti-abortion',
+      'school choice', 'education vouchers',
+      'military strength', 'strong armed forces',
+      'support our troops', 'back the troops',
+      'patriotic duty', 'civic duty',
+      'guard the constitution', 'defend the constitution',
+      'religious freedom', 'faith liberties',
+      'hard work pays', 'work ethic',
+      'secure the homeland', 'homeland security',
+      'veteran support', 'honor veterans'
+    ],
     contextual: [ 'free market', 'individual rights', 'small government' ],
     weight: 1.0
   },
+  // Far-Right
   'far-right': {
-    keywords: [ 'nationalist', 'sovereignty', 'patriot', 'traditional', 'strong' ],
+    keywords: [
+      'blood and soil', 'racial purity',
+      'great replacement', 'population replacement myth',
+      'white nationalism', 'white supremacist',
+      'globalist conspiracy', 'elite puppet masters',
+      'anti-semitic', 'jewish conspiracy',
+      'reclaim our country', 'take back the nation',
+      'sovereignty over wall', 'build the wall',
+      'cultural purity', 'ethnic purity',
+      'militia movement', 'armed civilian groups',
+      'state’s rights', 'nullification',
+      'end the deep state', 'drain the swamp',
+      'traitors in high places', 'elites are traitors',
+      'patriot militias', 'armed patriots',
+      'guns aren’t the problem', '2nd amendment absolutism',
+      'national revival', 'national rebirth',
+      'racial hierarchy', 'superior race',
+      'pure bloodline', 'bloodline purity',
+      'uprising now', 'insurrection now',
+      'ethnic cleansing', 'purge the undesirables'
+    ],
     contextual: [ 'national identity', 'cultural preservation', 'law and order' ],
     weight: 1.0
   }
+};
+
+const POLITICAL_SENTIMENT_SCALE = {
+  'far-left': 1.00,
+  'left': 0.50,
+  'center-left': 0.25,
+  'center': 0.00,
+  'center-right': -0.25,
+  'right': -0.50,
+  'far-right': -1.00,
 };
 
 export async function analyzeSentiment( text ) {
@@ -144,73 +310,70 @@ export async function analyzeSentiment( text ) {
 
 export async function predictPoliticalSpectrum( text ) {
   if ( !text?.trim() ) {
-    return { spectrum: 'center', confidence: 0 };
+    return { spectrum: 'center', confidence: 0, politicalScore: 0 };
   }
 
   const lowercaseText = text.toLowerCase();
-  const words = lowercaseText.split( /\s+/ );
 
   try {
+    // 1) Transformer fallback
     if ( textClassificationPipeline ) {
       try {
         const result = await textClassificationPipeline( text, { truncation: true } );
-        const transformerConfidence = result[ 0 ].score;
-
-        if ( transformerConfidence > 0.8 ) {
+        const top = result[ 0 ];
+        if ( top.score > 0.8 ) {
+          const spectrum = top.label === 'NEGATIVE' ? 'right' : 'left';
           return {
-            spectrum: result[ 0 ].label === 'NEGATIVE' ? 'right' : 'left',
-            confidence: transformerConfidence
+            spectrum,
+            confidence: top.score,
+            politicalScore: POLITICAL_SENTIMENT_SCALE[ spectrum ]
           };
         }
-      } catch ( error ) {
-        console.warn( 'Transformer classification failed:', error );
+      } catch ( err ) {
+        console.warn( 'Transformer classification failed:', err );
       }
     }
 
-    let categoryScores = Object.entries( POLITICAL_CATEGORIES ).map( ( [ category, data ] ) => {
+    // 2) Keyword/context scoring
+    const words = lowercaseText.split( /\s+/ );
+    const categoryScores = Object.entries( POLITICAL_CATEGORIES ).map( ( [ category, data ] ) => {
       let score = 0;
-
       data.keywords.forEach( keyword => {
-        const keywordWords = keyword.toLowerCase().split( /\s+/ );
-        if ( keywordWords.length === 1 ) {
-          const matches = words.filter( word => word === keyword ).length;
-          score += matches * data.weight;
+        const kw = keyword.toLowerCase();
+        if ( kw.includes( ' ' ) ) {
+          if ( lowercaseText.includes( kw ) ) score += data.weight * 1.5;
         } else {
-          if ( lowercaseText.includes( keyword ) ) {
-            score += data.weight * 1.5;
-          }
+          score += words.filter( w => w === kw ).length * data.weight;
         }
       } );
-
-      data.contextual.forEach( context => {
-        if ( lowercaseText.includes( context.toLowerCase() ) ) {
+      data.contextual.forEach( ctx => {
+        if ( lowercaseText.includes( ctx.toLowerCase() ) ) {
           score += data.weight * 0.8;
         }
       } );
-
       return { category, score };
     } );
 
     categoryScores.sort( ( a, b ) => b.score - a.score );
-    const highestScore = categoryScores[ 0 ];
-    const secondHighestScore = categoryScores[ 1 ];
+    const [ highest, second ] = categoryScores;
+    const diff = highest.score - ( second?.score || 0 );
+    const confidence = Math.min( Math.max( diff * 0.3, 0.1 ), 1 );
 
-    const scoreDifference = highestScore.score - secondHighestScore.score;
-    const confidence = Math.min( Math.max( scoreDifference * 0.3, 0.1 ), 1 );
-
-    if ( highestScore.score < 0.2 ) {
-      return { spectrum: 'center', confidence: 0.3 };
+    if ( highest.score < 0.2 ) {
+      return { spectrum: 'center', confidence: 0.3, politicalScore: 0.00 };
     }
 
     return {
-      spectrum: highestScore.category,
-      confidence
+      spectrum: highest.category,
+      confidence,
+      politicalScore: POLITICAL_SENTIMENT_SCALE[ highest.category ]
     };
   } catch ( error ) {
     console.error( 'Political spectrum prediction failed:', error );
-    return { spectrum: 'center', confidence: 0.1 };
+    return { spectrum: 'center', confidence: 0.1, politicalScore: 0.00 };
   }
 }
+
 
 ( async () => {
   try {
@@ -218,4 +381,4 @@ export async function predictPoliticalSpectrum( text ) {
   } catch ( error ) {
     console.warn( 'Initial model load failed, will retry on first use:', error );
   }
-})();
+} )();
