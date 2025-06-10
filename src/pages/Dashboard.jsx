@@ -62,30 +62,30 @@ export default function Dashboard() {
   }
 
   return (
-    <div>
-      <div className="mb-6 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Sentiment Analysis Dashboard</h1>
-      </div>
-      <div className="mb-6 w-full">
-        <ChatLogUploader />
-      </div>
-
-      <div className="mx-auto flex flex-wrap max-w-7xl">
-        <div className="grid grid-cols-1 gap-6 w-full">
-          <div>
-            <FeedbackChart />
-          </div>
-          <div className="mt-6">
-            <SentimentSummary />
+    <>
+      { !isAdmin && ( <div>
+        <div className="mb-6 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-900">Sentiment Analysis Dashboard</h1>
+        </div>
+        <div className="mb-6 w-full">
+          <ChatLogUploader />
+        </div>
+        <div className="mx-auto flex flex-wrap max-w-7xl">
+          <div className="grid grid-cols-1 gap-6 w-full">
+            <div>
+              <FeedbackChart />
+            </div>
+            <div className="mt-6">
+              <SentimentSummary />
+            </div>
           </div>
         </div>
-      </div>
-
-      { !isAdmin && (
         <div className="mt-8">
           <AdminPanel feedback={ feedback } />
         </div>
+
+      </div>
       ) }
-    </div>
+    </>
   );
 }

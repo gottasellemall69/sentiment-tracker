@@ -40,26 +40,58 @@ export const POLITICAL_CATEGORIES = {
   // Far-Left
   'far-left': {
     keywords: [
-      'tax the rich', 'soak the rich', 'wealth tax',
-      'climate justice', 'environmental justice',
-      'defund the police', 'abolish the police', 'end police funding',
-      'abolish capitalism', 'smash capitalism', 'no to private enterprise',
-      'end private prisons', 'prison abolition', 'close for-profit prisons',
-      'solidarity forever', 'worker solidarity', 'union power',
-      'worker revolution', 'proletarian revolution', 'global workers uprising',
-      'class struggle', 'rich vs. poor', 'bottom-up power',
-      'redistribute wealth', 'wealth redistribution', 'equal share of resources',
-      'dismantle patriarchy', 'gender liberation', 'end patriarchal systems',
-      'seize the means', 'take the means of production',
-      'power to the people', 'people power', 'mass empowerment',
-      'organize the masses', 'mass organization', 'grassroots uprising',
-      'revolution now', 'immediate uprising', 'overthrow the system',
-      'systemic oppression', 'institutional oppression',
-      'smash the state', 'tear down the state',
-      'anti-imperialism', 'no empire', 'end foreign domination',
-      'people’s liberation', 'liberate the people',
-      'workers of the world', 'international proletariat',
-      'direct action', 'take direct action'
+      'tax the rich', 'tax', 'the', 'rich',
+      'soak the rich', 'soak',
+      'wealth tax', 'wealth',
+      'climate justice', 'climate', 'justice',
+      'environmental justice', 'environmental',
+      'defund the police', 'defund', 'the', 'police',
+      'abolish the police', 'abolish',
+      'end police funding', 'end', 'police', 'funding',
+      'abolish capitalism', 'capitalism',
+      'smash capitalism', 'smash',
+      'no to private enterprise', 'private', 'enterprise',
+      'end private prisons', 'prisons',
+      'prison abolition', 'prison', 'abolition',
+      'close for-profit prisons', 'close', 'for-profit',
+      'solidarity forever', 'solidarity', 'forever',
+      'worker solidarity', 'worker',
+      'union power', 'union', 'power',
+      'worker revolution', 'revolution',
+      'proletarian revolution', 'proletarian',
+      'global workers uprising', 'global', 'workers', 'uprising',
+      'class struggle', 'class', 'struggle',
+      'rich vs. poor', 'vs.', 'poor',
+      'bottom-up power', 'bottom-up',
+      'redistribute wealth', 'redistribute',
+      'wealth redistribution', 'redistribution',
+      'equal share of resources', 'equal', 'share', 'resources',
+      'dismantle patriarchy', 'dismantle', 'patriarchy',
+      'gender liberation', 'gender', 'liberation',
+      'end patriarchal systems', 'patriarchal', 'systems',
+      'seize the means', 'seize', 'means',
+      'take the means of production', 'take', 'production',
+      'power to the people', 'people',
+      'mass empowerment', 'mass', 'empowerment',
+      'organize the masses', 'organize', 'masses',
+      'mass organization', 'organization',
+      'grassroots uprising', 'grassroots',
+      'revolution now', 'now',
+      'immediate uprising', 'immediate',
+      'overthrow the system', 'overthrow', 'system',
+      'systemic oppression', 'systemic', 'oppression',
+      'institutional oppression', 'institutional',
+      'smash the state', 'state',
+      'tear down the state', 'tear', 'down',
+      'anti-imperialism', 'imperialism',
+      'no empire', 'empire',
+      'end foreign domination', 'foreign', 'domination',
+      'people’s liberation', 'people’s',
+      'liberate the people', 'liberate',
+      'workers of the world', 'world',
+      'international proletariat', 'international',
+      'direct action', 'direct', 'action',
+      'take direct action', 'take'
     ],
     contextual: [ 'wealth redistribution', 'state ownership', 'planned economy' ],
     weight: 1.0
@@ -68,166 +100,241 @@ export const POLITICAL_CATEGORIES = {
   // Left
   'left': {
     keywords: [
-      'universal healthcare', 'single payer healthcare',
-      'income inequality', 'wealth gap', 'economic disparity',
-      'affordable housing', 'housing for all',
-      'green new deal', 'environmental overhaul',
-      'fight racism', 'combat racism', 'anti-racist policies',
-      'women’s rights', 'gender equality',
-      'lgbtq+ rights', 'queer liberation',
-      'living wage', 'fair wage', 'minimum decent wage',
-      'social justice', 'fairness for all',
-      'corporate accountability', 'hold corporations accountable',
-      'climate action', 'act on climate change',
-      'protect medicare', 'save medicare',
-      'expand social safety net', 'strengthen social programs',
-      'stop voter suppression', 'end voter disenfranchisement',
-      'fund public schools', 'invest in education',
-      'raise minimum wage', 'increase base pay',
-      'clean energy jobs', 'renewable energy employment',
-      'protect reproductive rights', 'defend abortion access',
-      'end discrimination', 'fight bias',
-      'community investment', 'invest in communities'
+      'universal healthcare', 'universal', 'healthcare',
+      'single payer healthcare', 'single', 'payer',
+      'income inequality', 'income', 'inequality',
+      'wealth gap', 'gap',
+      'economic disparity', 'economic', 'disparity',
+      'affordable housing', 'affordable', 'housing',
+      'housing for all', 'for', 'all',
+      'green new deal', 'green', 'new', 'deal',
+      'environmental overhaul', 'environmental', 'overhaul',
+      'fight racism', 'fight', 'racism',
+      'combat racism', 'combat',
+      'anti-racist policies', 'anti-racist', 'policies',
+      'women’s rights', 'women’s', 'rights',
+      'gender equality', 'gender', 'equality',
+      'lgbtq+ rights', 'lgbtq+',
+      'queer liberation', 'queer', 'liberation',
+      'living wage', 'living', 'wage',
+      'fair wage', 'fair',
+      'minimum decent wage', 'minimum', 'decent',
+      'social justice', 'social',
+      'fairness for all', 'fairness',
+      'corporate accountability', 'corporate', 'accountability',
+      'hold corporations accountable', 'hold', 'corporations',
+      'climate action', 'action',
+      'act on climate change', 'act', 'change',
+      'protect medicare', 'protect', 'medicare',
+      'save medicare', 'save',
+      'expand social safety net', 'expand', 'social', 'safety', 'net',
+      'strengthen social programs', 'strengthen', 'programs',
+      'stop voter suppression', 'stop', 'voter', 'suppression',
+      'end voter disenfranchisement', 'disenfranchisement',
+      'fund public schools', 'fund', 'public', 'schools',
+      'invest in education', 'invest', 'education',
+      'raise minimum wage', 'raise', 'minimum',
+      'increase base pay', 'increase', 'base', 'pay',
+      'clean energy jobs', 'clean', 'energy', 'jobs',
+      'renewable energy employment', 'renewable', 'employment',
+      'protect reproductive rights', 'reproductive',
+      'defend abortion access', 'defend', 'abortion', 'access',
+      'end discrimination', 'discrimination',
+      'fight bias', 'bias',
+      'community investment', 'community', 'investment'
     ],
     contextual: [ 'social programs', 'public services', 'environmental protection' ],
-    weight: 1.0
+    weight: 0.50
   },
 
   // Center-Left
   'center-left': {
     keywords: [
-      'common sense', 'practical solutions',
-      'bipartisan', 'cross-party cooperation',
-      'balanced approach', 'well-rounded policy',
-      'moderate', 'centrist leanings',
-      'incremental change', 'step-by-step reform',
-      'working families', 'family-focused policy',
-      'bridge divides', 'close partisan gaps',
-      'pragmatic solutions', 'real-world fixes',
-      'responsible spending', 'fiscally cautious',
-      'public-private partnership', 'govt-business collaboration',
-      'fiscal prudence', 'budget discipline',
-      'evidence-based policy', 'data-driven decisions',
-      'smart regulation', 'targeted oversight',
-      'centrist coalition', 'broad alliance',
-      'across the aisle', 'bipartisan support',
-      'consensus building', 'finding middle ground',
-      'steady progress', 'gradual improvement',
-      'middle path', 'third way',
-      'thoughtful reform', 'considered change',
-      'inclusive growth', 'growth for all'
+      'common sense', 'common', 'sense',
+      'practical solutions', 'practical', 'solutions',
+      'bipartisan',
+      'cross-party cooperation', 'cross-party', 'cooperation',
+      'balanced approach', 'balanced', 'approach',
+      'well-rounded policy', 'well-rounded', 'policy',
+      'moderate',
+      'centrist leanings', 'centrist', 'leanings',
+      'incremental change', 'incremental',
+      'step-by-step reform', 'step-by-step', 'step', 'by', 'reform',
+      'working families', 'working', 'families',
+      'family-focused policy', 'family-focused',
+      'bridge divides', 'bridge', 'divides',
+      'close partisan gaps', 'close', 'partisan', 'gaps',
+      'pragmatic solutions', 'pragmatic',
+      'real-world fixes', 'real-world', 'fixes',
+      'responsible spending', 'responsible', 'spending',
+      'fiscally cautious', 'fiscally', 'cautious',
+      'public-private partnership', 'public-private', 'partnership',
+      'govt-business collaboration', 'govt-business', 'collaboration',
+      'fiscal prudence', 'prudent', 'prudent',
+      'budget discipline', 'budget', 'discipline',
+      'evidence-based policy', 'evidence-based',
+      'data-driven decisions', 'data-driven', 'decisions',
+      'smart regulation', 'smart', 'regulation',
+      'centrist coalition', 'coalition',
+      'broad alliance', 'broad', 'alliance',
+      'across the aisle', 'across', 'aisle',
+      'bipartisan support', 'support',
+      'consensus building', 'consensus', 'building',
+      'steady progress', 'steady', 'progress',
+      'gradual improvement', 'gradual', 'improvement',
+      'middle path', 'middle', 'path',
+      'third way', 'third', 'way',
+      'thoughtful reform', 'thoughtful',
+      'considered change', 'considered',
+      'inclusive growth', 'inclusive', 'growth',
+      'growth for all', 'for', 'all'
     ],
     contextual: [ 'mixed economy', 'regulated markets', 'social safety net' ],
-    weight: 1.0
+    weight: 0.25
   },
 
   // Center
   'center': {
     keywords: [
-      'neutral', 'impartial',
-      'objective', 'unbiased',
-      'balanced', 'equitable',
-      'nonpartisan', 'apolitical',
-      'status quo', 'existing order',
-      'steady hand', 'calm leadership',
-      'middle ground', 'common ground',
-      'centrist', 'moderate stance',
-      'equilibrium', 'stability',
-      'clear-eyed', 'level-headed',
-      'measured response', 'calm reaction',
-      'no spin', 'straight talk',
-      'fact-based', 'evidence-first',
-      'sound judgment', 'good sense',
-      'unbiased', 'fair-minded',
-      'moderation', 'restraint',
-      'pragmatic', 'realistic',
-      'steady leadership', 'reliable governance'
+      'neutral', 'impartial', 'objective', 'unbiased', 'balanced', 'equitable',
+      'nonpartisan', 'apolitical', 'status quo', 'steady hand', 'calm leadership',
+      'middle ground', 'common ground', 'centrist', 'moderate stance',
+      'equilibrium', 'stability', 'clear-eyed', 'measured response',
+      'straight talk', 'fact-based', 'sound judgment', 'good sense',
+      'fair-minded', 'moderation', 'restraint', 'pragmatic', 'realistic',
+      'reliable governance'
     ],
     contextual: [ 'common ground', 'practical solutions', 'middle way' ],
-    weight: 1.0
+    weight: 0.00
   },
 
   // Center-Right
   'center-right': {
     keywords: [
-      'fiscal responsibility', 'budget responsibility',
-      'market reform', 'economic liberalization',
-      'strong defense', 'robust military',
-      'tax cuts', 'lower taxes',
-      'limit government', 'shrink govt',
-      'free enterprise', 'entrepreneurial freedom',
-      'individual liberty', 'personal freedom',
-      'economic growth', 'growth economy',
-      'prudent regulation', 'limited oversight',
-      'public safety', 'lawful order',
-      'small businesses', 'mom-and-pop shops',
-      'job creators', 'employers first',
-      'balanced budget', 'budget balance',
-      'defense spending', 'defense investment',
-      'secure borders', 'border enforcement',
-      'property rights', 'private property',
-      'entrepreneurship', 'startup culture',
-      'sound money', 'monetary stability',
-      'reduce red tape', 'cut bureaucracy',
-      'lawful immigration', 'legal immigration'
+      '#MAGA', 'Make America Great Again', 'MAGA',
+      '#AmericaFirst', 'AmericaFirst',
+      'balanced budget', 'balanced', 'budget',
+      'fiscal responsibility', 'fiscal', 'responsibility',
+      'budget responsibility',
+      'market reform', 'market', 'reform',
+      'economic liberalization', 'economic', 'liberalization',
+      'strong defense', 'strong', 'defense',
+      'robust military', 'robust', 'military',
+      'tax cuts', 'tax', 'cuts',
+      'lower taxes', 'lower', 'taxes',
+      'limit government', 'limit', 'government',
+      'small government', 'small',
+      'free enterprise', 'free', 'enterprise',
+      'entrepreneurial freedom', 'entrepreneurial', 'freedom',
+      'personal responsibility', 'personal',
+      'individual liberty', 'individual', 'liberty',
+      'economic growth', 'growth',
+      'growth economy', 'economy',
+      'prudent regulation', 'prudent', 'regulation',
+      'limited oversight', 'limited', 'oversight',
+      'public safety', 'public', 'safety',
+      'lawful order', 'lawful', 'order',
+      'border enforcement', 'border', 'enforcement',
+      'secure borders', 'secure', 'borders',
+      'small businesses', 'businesses', 'small',
+      'mom-and-pop shops', 'mom-and-pop', 'shops',
+      'job creators', 'job', 'creators',
+      'employers first', 'employers', 'first',
+      'property rights', 'property', 'rights',
+      'entrepreneurship', 'startup culture', 'startup', 'culture',
+      'sound money', 'sound', 'money',
+      'monetary stability', 'monetary', 'stability',
+      'reduce red tape', 'reduce', 'red', 'tape',
+      'cut bureaucracy', 'cut', 'bureaucracy',
+      'lawful immigration', 'lawful', 'immigration'
     ],
     contextual: [ 'free enterprise', 'limited government', 'personal responsibility' ],
-    weight: 1.0
+    weight: -0.25
   },
+
 
   // Right
   'right': {
     keywords: [
-      'traditional values', 'conservative values',
-      'family values', 'family first',
-      'patriotism', 'love of country',
-      'law and order', 'tough on crime',
-      'second amendment', 'gun rights',
-      'border security', 'secure borders',
-      'small government', 'limited govt',
-      'personal responsibility', 'self-reliance',
-      'rule of law', 'legal order',
-      'American exceptionalism', 'US exceptionalism',
-      'pro-life', 'anti-abortion',
-      'school choice', 'education vouchers',
-      'military strength', 'strong armed forces',
-      'support our troops', 'back the troops',
-      'patriotic duty', 'civic duty',
-      'guard the constitution', 'defend the constitution',
-      'religious freedom', 'faith liberties',
-      'hard work pays', 'work ethic',
-      'secure the homeland', 'homeland security',
-      'veteran support', 'honor veterans'
+      'traditional values', 'traditional', 'values',
+      'conservative values', 'conservative',
+      'family values', 'family',
+      'family first', 'first',
+      'patriotism', 'patriotism',
+      'love of country', 'love', 'country',
+      'law and order', 'law', 'order',
+      'tough on crime', 'tough', 'crime',
+      '#2A', '2A',
+      'second amendment', 'second', 'amendment',
+      'gun rights', 'gun', 'rights',
+      'border security', 'border', 'security',
+      'secure borders', 'secure', 'borders',
+      'small government', 'small', 'government',
+      'limited govt', 'limited', 'govt',
+      'personal freedom', 'personal', 'freedom',
+      'self-reliance', 'self', 'reliance',
+      'rule of law', 'rule', 'law',
+      'legal order', 'legal', 'order',
+      'American exceptionalism', 'American', 'exceptionalism',
+      'US exceptionalism', 'US',
+      'pro-life', 'pro', 'life',
+      'anti-abortion', 'anti', 'abortion',
+      'school choice', 'school', 'choice',
+      'education vouchers', 'education', 'vouchers',
+      'religious freedom', 'religious',
+      'faith liberties', 'faith', 'liberties',
+      'military strength', 'military', 'strength',
+      'support our troops', 'support', 'troops',
+      'back the troops', 'back',
+      'patriotic duty', 'patriotic', 'duty',
+      'civic duty', 'civic',
+      'guard the constitution', 'guard', 'constitution',
+      'defend the constitution', 'defend',
+      'hard work pays', 'hard', 'work', 'pays',
+      'work ethic', 'ethic',
+      'secure the homeland', 'homeland', 'secure',
+      'homeland security', 'security',
+      'veteran support', 'veteran', 'support',
+      'honor veterans', 'honor', 'veterans'
     ],
     contextual: [ 'free market', 'individual rights', 'small government' ],
-    weight: 1.0
+    weight: -0.50
   },
+
+
   // Far-Right
   'far-right': {
     keywords: [
-      'blood and soil', 'racial purity',
-      'great replacement', 'population replacement myth',
-      'white nationalism', 'white supremacist',
-      'globalist conspiracy', 'elite puppet masters',
-      'anti-semitic', 'jewish conspiracy',
-      'reclaim our country', 'take back the nation',
-      'sovereignty over wall', 'build the wall',
-      'cultural purity', 'ethnic purity',
-      'militia movement', 'armed civilian groups',
-      'state’s rights', 'nullification',
-      'end the deep state', 'drain the swamp',
-      'traitors in high places', 'elites are traitors',
-      'patriot militias', 'armed patriots',
-      'guns aren’t the problem', '2nd amendment absolutism',
-      'national revival', 'national rebirth',
-      'racial hierarchy', 'superior race',
-      'pure bloodline', 'bloodline purity',
-      'uprising now', 'insurrection now',
-      'ethnic cleansing', 'purge the undesirables'
+      '#whitegenocide', 'white genocide', 'white', 'genocide',
+      '#whitelivesmatter', 'white lives matter', 'lives', 'matter',
+      '#bloodandsoil', 'blood and soil', 'blood', 'soil',
+      '#GreatReplacement', 'great replacement', 'great', 'replacement',
+      'white nationalism', 'white', 'nationalism',
+      'white supremacist', 'supremacist',
+      'race war', 'race', 'war',
+      'ethnic cleansing', 'ethnic', 'cleansing',
+      'racial purity', 'racial', 'purity',
+      'globalist conspiracy', 'globalist', 'conspiracy',
+      'drain the swamp', 'drain', 'the', 'swamp',
+      'end the deep state', 'end', 'deep', 'state',
+      'build the wall', 'build', 'the', 'wall',
+      'take back the nation', 'take', 'back', 'nation',
+      'Christian nationalism', 'Christian', 'nationalism',
+      'right wing death squad', 'right', 'wing', 'death', 'squad',
+      'militia movement', 'militia', 'movement',
+      'armed patriots', 'armed', 'patriots',
+      'insurrection',
+      'uprising',
+      'stop the steal', 'stop', 'steal',
+      'election was stolen', 'election', 'was', 'stolen',
+      'cultural marxism', 'cultural', 'marxism',
+      'white identity', 'identity',
+      'racial hierarchy', 'hierarchy'
     ],
     contextual: [ 'national identity', 'cultural preservation', 'law and order' ],
-    weight: 1.0
-  }
+    weight: -1.00
+  },
+
 };
 
 const POLITICAL_SENTIMENT_SCALE = {
@@ -247,7 +354,7 @@ export async function analyzeSentiment( text ) {
       magnitude: 0,
       topWords: [],
       confidence: 0,
-      sentimentLabel: "neutral"
+      sentimentLabel: "[]"
     };
   }
 
@@ -303,42 +410,24 @@ export async function analyzeSentiment( text ) {
       magnitude: 0,
       topWords: [],
       confidence: 0,
-      sentimentLabel: "neutral"
+      sentimentLabel: "#ERR"
     };
   }
 }
 
 export async function predictPoliticalSpectrum( text ) {
   if ( !text?.trim() ) {
-    return { spectrum: 'center', confidence: 0, politicalScore: 0 };
+    return { spectrum: 'center', confidence: 0.0, politicalScore: POLITICAL_SENTIMENT_SCALE[ 'center' ] };
   }
 
   const lowercaseText = text.toLowerCase();
+  const words = lowercaseText.split( /\s+/ );
 
   try {
-    // 1) Transformer fallback
-    if ( textClassificationPipeline ) {
-      try {
-        const result = await textClassificationPipeline( text, { truncation: true } );
-        const top = result[ 0 ];
-        if ( top.score > 0.8 ) {
-          const spectrum = top.label === 'NEGATIVE' ? 'right' : 'left';
-          return {
-            spectrum,
-            confidence: top.score,
-            politicalScore: POLITICAL_SENTIMENT_SCALE[ spectrum ]
-          };
-        }
-      } catch ( err ) {
-        console.warn( 'Transformer classification failed:', err );
-      }
-    }
-
-    // 2) Keyword/context scoring
-    const words = lowercaseText.split( /\s+/ );
     const categoryScores = Object.entries( POLITICAL_CATEGORIES ).map( ( [ category, data ] ) => {
       let score = 0;
-      data.keywords.forEach( keyword => {
+
+      Array.isArray( data.keywords ) && data.keywords.forEach( keyword => {
         const kw = keyword.toLowerCase();
         if ( kw.includes( ' ' ) ) {
           if ( lowercaseText.includes( kw ) ) score += data.weight * 1.5;
@@ -346,21 +435,24 @@ export async function predictPoliticalSpectrum( text ) {
           score += words.filter( w => w === kw ).length * data.weight;
         }
       } );
-      data.contextual.forEach( ctx => {
+
+      Array.isArray( data.contextual ) && data.contextual.forEach( ctx => {
         if ( lowercaseText.includes( ctx.toLowerCase() ) ) {
           score += data.weight * 0.8;
         }
       } );
+
       return { category, score };
     } );
 
-    categoryScores.sort( ( a, b ) => b.score - a.score );
+    // **SORT BY ABSOLUTE** score so strong negatives (far-right) win
+    categoryScores.sort( ( a, b ) => Math.abs( b.score ) - Math.abs( a.score ) );
     const [ highest, second ] = categoryScores;
-    const diff = highest.score - ( second?.score || 0 );
+    const diff = Math.abs( highest.score ) - Math.abs( second?.score || 0 );
     const confidence = Math.min( Math.max( diff * 0.3, 0.1 ), 1 );
 
-    if ( highest.score < 0.2 ) {
-      return { spectrum: 'center', confidence: 0.3, politicalScore: 0.00 };
+    if ( Math.abs( highest.score ) < 0.2 ) {
+      return { spectrum: 'center', confidence: 0.3, politicalScore: POLITICAL_SENTIMENT_SCALE[ 'center' ] };
     }
 
     return {
@@ -370,9 +462,10 @@ export async function predictPoliticalSpectrum( text ) {
     };
   } catch ( error ) {
     console.error( 'Political spectrum prediction failed:', error );
-    return { spectrum: 'center', confidence: 0.1, politicalScore: 0.00 };
+    return { spectrum: 'center', confidence: 0.1, politicalScore: POLITICAL_SENTIMENT_SCALE[ 'center' ] };
   }
 }
+
 
 
 ( async () => {
