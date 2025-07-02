@@ -211,7 +211,7 @@ export const POLITICAL_CATEGORIES = {
   // Center-Right
   'center-right': {
     keywords: [
-      '#MAGA', 'Make America Great Again', 'MAGA',
+      '#MAGA', 'Trump', 'Donald Trump', 'Make America Great Again', 'MAGA',
       '#AmericaFirst', 'AmericaFirst',
       'balanced budget', 'balanced', 'budget',
       'fiscal responsibility', 'fiscal', 'responsibility',
@@ -257,6 +257,7 @@ export const POLITICAL_CATEGORIES = {
   'right': {
     keywords: [
       'traditional values', 'traditional', 'values',
+      'Trump', 'Donald Trump',
       'conservative values', 'conservative',
       'family values', 'family',
       'family first', 'first',
@@ -305,6 +306,7 @@ export const POLITICAL_CATEGORIES = {
   // Far-Right
   'far-right': {
     keywords: [
+      'Trump', 'Donald Trump',
       '#whitegenocide', 'white genocide', 'white', 'genocide',
       '#whitelivesmatter', 'white lives matter', 'lives', 'matter',
       '#bloodandsoil', 'blood and soil', 'blood', 'soil',
@@ -329,7 +331,8 @@ export const POLITICAL_CATEGORIES = {
       'election was stolen', 'election', 'was', 'stolen',
       'cultural marxism', 'cultural', 'marxism',
       'white identity', 'identity',
-      'racial hierarchy', 'hierarchy'
+      'racial hierarchy', 'hierarchy', 'aryan', 'aryan supremacy', 'white pride', 'white power',
+      'whites will prevail', 'whites', 'prevail', 'superior race', 'master race', 'pure bloodline'
     ],
     contextual: [ 'national identity', 'cultural preservation', 'law and order' ],
     weight: -1.00

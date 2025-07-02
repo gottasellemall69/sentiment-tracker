@@ -91,19 +91,30 @@ const AdminPanel = () => {
 
                 {/* FIXED Political Spectrum Column */ }
                 <td className="px-6 py-4 text-sm text-gray-500">
-                  { item.politicalSpectrum && item.politicalSpectrum !== "N/A" ? (
-                    <><strong>Submitted:</strong> { item.politicalSpectrum }</>
-                  ) : item.predictedSpectrum && item.predictedSpectrum !== "N/A" ? (
-                    <><strong>Predicted:</strong> { item.predictedSpectrum }</>
+                  { item.source === 'feedback-form' ? (
+                    item.politicalSpectrum && item.politicalSpectrum.trim() !== '' && item.politicalSpectrum !== 'N/A' ? (
+                      <><strong>Submitted:</strong> { item.politicalSpectrum }</>
+                    ) : item.predictedSpectrum && item.predictedSpectrum.trim() !== '' ? (
+                      <><strong>Predicted:</strong> { item.predictedSpectrum }</>
+                    ) : (
+                      <span className="text-gray-400 italic">N/A</span>
+                    )
                   ) : (
-                    <span className="text-gray-400 italic">N/A</span>
+                    item.politicalSpectrum && item.politicalSpectrum.trim() !== '' && item.politicalSpectrum !== 'N/A' ? (
+                      <><strong>Submitted:</strong> { item.politicalSpectrum }</>
+                    ) : (
+                      <span className="text-gray-400 italic">N/A</span>
+                    )
                   ) }
                 </td>
 
+
+
+
                 <td className="px-6 py-4">
                   <span className={ `px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${ item.sentiment.score > 0
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800'
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-red-100 text-red-800'
                     }` }>
                     { item.sentiment.score.toFixed( 2 ) }
                   </span>
